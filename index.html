@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Surkhan–Pul-e-Khumri: joint register of open issues (training prototype)</title>
+<style>
+:root{
+  --bg:#f8fafd; --surface:#ffffff; --soft:#eef3fa; --line:#d8e0eb;
+  --ink:#0f1e3d; --text:#34404f; --muted:#5d6878;
+  --gold:#f2b705; --gold-ink:#7a5600; --navy:#0f1e3d; --on-navy:#ffffff;
+  --blue:#2f5f8f; --green:#1f6f45; --red:#a32020; --orange:#a8561a;
+  --focus:#2f5f8f;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c1426; --surface:#131d33; --soft:#1a2742; --line:#2b3a5a;
+    --ink:#f2f5fb; --text:#d3dbe9; --muted:#9db0cc;
+    --gold:#f2b705; --gold-ink:#f2b705; --navy:#1a2742; --on-navy:#ffffff;
+    --blue:#8fb6e3; --green:#6fcf9b; --red:#ff8d8d; --orange:#f0a36a; --focus:#8fb6e3;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0c1426; --surface:#131d33; --soft:#1a2742; --line:#2b3a5a;
+  --ink:#f2f5fb; --text:#d3dbe9; --muted:#9db0cc;
+  --gold:#f2b705; --gold-ink:#f2b705; --navy:#1a2742; --on-navy:#ffffff;
+  --blue:#8fb6e3; --green:#6fcf9b; --red:#ff8d8d; --orange:#f0a36a; --focus:#8fb6e3;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px 56px}
+.banner{background:var(--navy);color:var(--on-navy);font-size:14px;letter-spacing:.06em;text-transform:uppercase;padding:10px 20px;text-align:center}
+header{padding:28px 0 8px}
+h1{font:700 clamp(26px,4vw,38px)/1.15 Georgia,"Times New Roman",serif;color:var(--ink);margin:0 0 10px}
+h2{font:700 clamp(22px,3vw,28px)/1.2 Georgia,"Times New Roman",serif;color:var(--ink);margin:0 0 6px}
+h3{font-size:18px;color:var(--ink);margin:0 0 6px}
+.lead{margin:0 0 14px;color:var(--text);max-width:820px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 0}
+.chip{background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:14px;color:var(--text)}
+.eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-ink);font-weight:700;margin:34px 0 4px}
+section{margin-top:6px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.clockbox{display:grid;gap:16px}
+.sliderrow{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+.sliderrow label{font-weight:700;color:var(--ink)}
+input[type=range]{flex:1 1 320px;min-width:200px;accent-color:var(--gold);height:32px}
+.dayval{font:700 22px Georgia,serif;color:var(--ink);min-width:150px}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+button.day{font:600 16px inherit;font-family:inherit;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:9px 16px;cursor:pointer;min-height:44px}
+button.day[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#0f1e3d}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.levels{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.lv{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--surface)}
+.lv .d{font:700 18px Georgia,serif;color:var(--ink)}
+.lv .w{font-weight:700;color:var(--ink);font-size:16px}
+.lv .o{font-size:15px;color:var(--muted)}
+.lv.on{background:var(--gold);border-color:var(--gold)}
+.lv.on .d,.lv.on .w,.lv.on .o{color:#0f1e3d}
+.note{font-size:15px;color:var(--muted)}
+.counters{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+.ct{flex:1 1 140px;border:1px solid var(--line);border-left-width:5px;border-radius:12px;padding:10px 14px;background:var(--surface)}
+.ct b{font:700 28px Georgia,serif;color:var(--ink);display:block;line-height:1.1}
+.ct span{font-size:15px;color:var(--muted)}
+.c-open{border-left-color:var(--muted)}.c-prog{border-left-color:var(--blue)}.c-esc{border-left-color:var(--orange)}.c-res{border-left-color:var(--green)}.c-late{border-left-color:var(--red)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:15.5px}
+th{background:var(--navy);color:var(--on-navy);text-align:left;font-size:13px;letter-spacing:.08em;text-transform:uppercase;padding:11px 8px;white-space:nowrap}
+td{padding:11px 8px;border-top:1px solid var(--line);vertical-align:top}
+tr.ex td:first-child{box-shadow:inset 4px 0 0 var(--gold)}
+td.id{font-weight:700;color:var(--ink);white-space:nowrap}
+.tbc{font-style:italic;color:var(--muted)}
+.badge{display:inline-block;border-radius:999px;padding:3px 11px;font-size:14px;font-weight:700;border:1px solid}
+.b-open{color:var(--muted);border-color:var(--muted)}.b-prog{color:var(--blue);border-color:var(--blue)}.b-esc{color:var(--orange);border-color:var(--orange)}.b-res{color:var(--green);border-color:var(--green)}
+.late{color:var(--red);font-weight:700}
+.tag{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-ink);font-weight:700;margin-left:6px}
+.legend{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+.legend div{font-size:15px;color:var(--muted)}
+.steps{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.st{border:1px solid var(--line);border-top:5px solid var(--line);border-radius:12px;background:var(--surface);padding:12px}
+.st .when{font-size:14px;color:var(--muted)}
+.st .name{font-weight:700;color:var(--ink);margin:2px 0 4px}
+.st .what{font-size:15px;color:var(--text)}
+.st.done{border-top-color:var(--green)}
+.st.next{border-top-color:var(--gold)}
+.paper{background:var(--surface);border:2px solid var(--ink);border-radius:6px;max-width:860px}
+.paper .ph{background:var(--navy);color:var(--on-navy);padding:10px 16px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.paper dl{margin:0;padding:6px 16px 14px;display:grid;grid-template-columns:minmax(150px,230px) 1fr;gap:0}
+.paper dt{font-weight:700;color:var(--ink);padding:9px 12px 9px 0;border-top:1px solid var(--line)}
+.paper dd{margin:0;padding:9px 0;border-top:1px solid var(--line)}
+.paper dd ul{margin:0;padding-left:20px}
+.rule{margin:12px 0 0;font-size:15px;color:var(--muted);max-width:860px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two ul{margin:6px 0 0;padding-left:22px}
+.two li{margin:5px 0}
+a{color:var(--blue)}
+footer{margin-top:40px;font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+@media (max-width:860px){
+  .levels,.legend{grid-template-columns:1fr 1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  .two{grid-template-columns:1fr}
+  .paper dl{grid-template-columns:1fr}
+  .paper dt{border-top:1px solid var(--line);padding-bottom:0}
+  .paper dd{border-top:none;padding-top:2px}
+}
+@media (max-width:520px){ .levels,.legend,.steps{grid-template-columns:1fr} body{font-size:16px} }
+</style>
+</head>
+<body>
+<div class="banner">Training prototype · built from public sources · not an official record</div>
+<div class="wrap">
+<header>
+  <h1>Surkhan–Pul-e-Khumri line: joint register of open issues</h1>
+  <p class="lead">A working demonstration of the procedure proposed for a 90-day pilot: one list of open issues, one clock that moves them upward, and one page that both sides agree on.</p>
+  <div class="chips">
+    <span class="chip">Issues: named at the talks of 14 October 2026</span>
+    <span class="chip">Owners: to be confirmed by the sides (Art. 2)</span>
+    <span class="chip">Access: confidential by default (Art. 10)</span>
+  </div>
+</header>
+
+<section aria-labelledby="clock-h">
+  <p class="eyebrow">One clock</p>
+  <h2 id="clock-h">Move the clock to see how open issues escalate</h2>
+  <div class="card clockbox">
+    <div class="sliderrow">
+      <label for="day">Pilot day</label>
+      <input id="day" type="range" min="1" max="31" step="1" value="1" aria-describedby="daynote">
+      <div class="dayval" id="dayval" aria-live="polite">Day 1</div>
+    </div>
+    <div class="btns" id="btns" role="group" aria-label="Jump to a pilot day"></div>
+    <div class="levels" id="levels"></div>
+    <p class="note" id="daynote">Illustration. Working days after registration. The worked example R-02 follows the six steps below; the other four issues stay unresolved so that the whole escalation path is visible. Deadlines are proposed pilot parameters, not current obligations. All statuses on pilot days are simulated.</p>
+  </div>
+</section>
+
+<section aria-labelledby="list-h">
+  <p class="eyebrow">One list</p>
+  <h2 id="list-h">The register on <span id="regday">pilot day 1</span></h2>
+  <div class="counters" id="counters" aria-live="polite"></div>
+  <div class="tablewrap" tabindex="0" role="region" aria-label="Register of open issues (scrolls sideways on small screens)">
+    <table>
+      <thead><tr><th>ID</th><th>Open issue</th><th>Source</th><th>Proposed owner</th><th>Deadline</th><th>Level now</th><th>Status</th><th>Next step</th><th>Evidence to close</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <h3 style="margin-top:22px">Process items, tracked outside the clock</h3>
+  <div class="tablewrap" tabindex="0" role="region" aria-label="Process items">
+    <table>
+      <thead><tr><th>ID</th><th>Item</th><th>Basis</th><th>Proposed owner</th><th>When</th><th>Status</th><th>Evidence to close</th></tr></thead>
+      <tbody>
+        <tr><td class="id">P-01</td><td>Confirm the competent bodies and name two contacts per side (Step 0)</td><td>2017 agreement, Art. 2: changes are notified through diplomatic channels</td><td class="tbc">Both sides, through diplomatic channels</td><td>Month 0</td><td><span class="badge b-open">Open</span></td><td>Written confirmation from each side</td></tr>
+        <tr><td class="id">P-02</td><td>Ask ADB for a written decision on Grant 0742-AFG: extend, restructure, close or ring-fence</td><td>ADB project 47282-007: 91% contracted, $0 disbursed, status “Active” after the original closing date</td><td class="tbc">Proposed: Uzbekistan, as an ADB member (authority to be confirmed)</td><td>Month 1</td><td><span class="badge b-open">Open</span></td><td>Letter sent; ADB reply logged</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="legend">
+    <div><span class="badge b-open">Open</span><br>Registered, with a source, a proposed owner and a deadline.</div>
+    <div><span class="badge b-prog">In progress</span><br>A decision is recorded and being carried out.</div>
+    <div><span class="badge b-esc">Escalated</span><br>Moved up a level because its time at the current level ran out.</div>
+    <div><span class="badge b-res">Resolved</span><br>Closed only with evidence: a decision, an approved document or a signed protocol.</div>
+  </div>
+</section>
+
+<section aria-labelledby="ex-h">
+  <p class="eyebrow">Worked example · R-02</p>
+  <h2 id="ex-h">One issue through all six steps</h2>
+  <div class="steps" id="steps"></div>
+</section>
+
+<section aria-labelledby="page-h">
+  <p class="eyebrow">One page</p>
+  <h2 id="page-h">The joint monthly status note, drafted from the register</h2>
+  <div class="paper" id="note"></div>
+  <p class="rule">Data rule: every figure carries its date, unit, indicator and source. The note is internal by default; a public summary appears only with both sides’ consent (Art. 10). It is issued by the 5th working day of each month and builds on Uzbekistan’s weekly progress reports.</p>
+</section>
+
+<section aria-labelledby="rules-h">
+  <p class="eyebrow">Pilot rules and targets</p>
+  <h2 id="rules-h">What the pilot tests in 90 days</h2>
+  <div class="two">
+    <div class="card"><h3>Rules</h3><ul>
+      <li>Every issue enters the register with a source, a proposed owner and a deadline in working days from registration.</li>
+      <li>The clock moves an open issue up one level after 7, 14 and 30 working days. These are pilot parameters, reviewed after three months.</li>
+      <li>An issue closes only with evidence.</li>
+      <li>The register and the note stay between the parties (Art. 10).</li>
+      <li>Supply volumes and tariffs stay in commercial contracts (Art. 9).</li>
+      <li>Financing and the ADB grant go to a separate track, where partners decide.</li>
+    </ul></div>
+    <div class="card"><h3>Targets during the pilot (to be tested)</h3><ul>
+      <li>100% of registered issues have an owner and a deadline.</li>
+      <li>80% of issues have a documented decision within 30 working days. This is a pilot objective, not a guaranteed result.</li>
+      <li>3 of 3 monthly notes are issued by the 5th working day.</li>
+      <li>Median working days from registration to decision are measured monthly and should fall.</li>
+    </ul></div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>Sources.</strong>
+  <a href="https://pajhwok.com/2026/10/14/afghan-uzbek-officials-agree-to-accelerate-surkhan-pul-i-khumri-power-project/">Pajhwok, 14 October 2026</a>: the issues named at the talks ·
+  <a href="https://lex.uz/docs/3591669">Agreement of 5 December 2017, official text (Lex.uz)</a>: Arts. 2, 3, 9, 10, 12 ·
+  <a href="https://www.adb.org/projects/47282-007/main">ADB project 47282-007, Grant 0742-AFG</a>.</p>
+  <p>Student project “Diplomatic Mechanisms for Developing Electricity Trade between Central Asia and Afghanistan”, expert committee defense, November 2026 (Birlink programme, Narxoz University). This is a training prototype built from public sources. It is not a document of either side or of ADB, and the statuses on pilot days are simulated.</p>
+</footer>
+</div>
+
+<script>
+(function(){
+  var ISSUES=[
+    {id:'R-01',name:'Financing and payment schedule',deadline:15,next:'Agree the schedule',evidence:'Signed payment schedule'},
+    {id:'R-02',name:'Substation equipment manufacturers',deadline:15,next:'Shortlist the makers',evidence:'Approved list of manufacturers',example:true},
+    {id:'R-03',name:'Technical designs and documents',deadline:30,next:'Set a delivery date',evidence:'Approved drawings and documents'},
+    {id:'R-04',name:'Document discrepancies',deadline:20,next:'Joint review',evidence:'Signed joint protocol'},
+    {id:'R-05',name:'Restart of construction',deadline:30,next:'Set the restart date',evidence:'Joint decision with a restart date'}
+  ];
+  var SRC='https://pajhwok.com/2026/10/14/afghan-uzbek-officials-agree-to-accelerate-surkhan-pul-i-khumri-power-project/';
+  var LEVELS=[
+    {d:'Days 1–7',w:'Level 1',o:'Company contacts solve it directly',min:1,max:7},
+    {d:'Days 8–14',w:'Level 2',o:'Joint working group (Art. 3)',min:8,max:14},
+    {d:'Days 15–30',w:'Level 3',o:'A higher level agreed by both sides',min:15,max:30},
+    {d:'After day 30',w:'Beyond',o:'Agenda of the next high-level bilateral meeting',min:31,max:99}
+  ];
+  var STEPS=[
+    {when:'14 Oct 2026',day:0,name:'1. Identified',what:'Named at the talks (Pajhwok). This step is real.'},
+    {when:'Day 1',day:1,name:'2. Registered',what:'Entered with its source and a deadline of 15 working days.'},
+    {when:'Day 1',day:1,name:'3. Owner proposed',what:'Owner proposed; both sides confirm it.'},
+    {when:'Day 8',day:8,name:'4. Escalated',what:'Still open after 7 working days, so it goes to the joint working group.'},
+    {when:'Day 12',day:12,name:'5. Decision recorded',what:'The group approves a shortlist; the decision is attached to the register.'},
+    {when:'Day 15',day:15,name:'6. Implementation checked',what:'The owner confirms the approved list; the issue closes with evidence.'}
+  ];
+  var daySel=document.getElementById('day');
+  function levelIndex(d){for(var i=0;i<LEVELS.length;i++){if(d>=LEVELS[i].min&&d<=LEVELS[i].max)return i}return 3}
+  function stateOf(issue,d){
+    var li=levelIndex(d), lv=LEVELS[li];
+    if(issue.example){
+      if(d>=15) return {level:'Closed on day 15',status:'Resolved',cls:'b-res',next:'None: closed with evidence',late:false};
+      if(d>=12) return {level:'Level 2 · Joint working group',status:'In progress',cls:'b-prog',next:'Decision recorded; owner verifies the approved list',late:false};
+    }
+    var late=d>issue.deadline;
+    var levelTxt=lv.w+' · '+(li===3?'Next high-level meeting':(li===2?'Agreed higher level':lv.o.split(' (')[0]));
+    if(li===0) return {level:levelTxt,status:'Open',cls:'b-open',next:issue.next,late:late};
+    var nxt = li===1?'Referred to the joint working group (Art. 3)':(li===2?'Referred to the agreed higher level':'On the agenda of the next high-level bilateral meeting');
+    return {level:levelTxt,status:'Escalated',cls:'b-esc',next:nxt,late:late};
+  }
+  function esc(t){return String(t).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
+  function render(d){
+    document.getElementById('dayval').textContent=(d>30?'After day 30':'Day '+d);
+    document.getElementById('regday').textContent=(d>30?'pilot day 31 (after day 30)':'pilot day '+d);
+    var bs=document.querySelectorAll('button.day');
+    for(var i=0;i<bs.length;i++){bs[i].setAttribute('aria-pressed',String(Number(bs[i].dataset.day)===d))}
+    // levels
+    var li=levelIndex(d), lh='';
+    LEVELS.forEach(function(l,i){lh+='<div class="lv'+(i===li?' on':'')+'"><div class="d">'+l.d+'</div><div class="w">'+l.w+'</div><div class="o">'+l.o+'</div></div>'});
+    document.getElementById('levels').innerHTML=lh;
+    // rows + counters
+    var c={open:0,prog:0,esc:0,res:0,late:0}, rows='', states=[];
+    ISSUES.forEach(function(it){
+      var s=stateOf(it,d); states.push(s);
+      if(s.status==='Open')c.open++; if(s.status==='In progress')c.prog++; if(s.status==='Escalated')c.esc++; if(s.status==='Resolved')c.res++;
+      if(s.late&&s.status!=='Resolved')c.late++;
+      rows+='<tr'+(it.example?' class="ex"':'')+'><td class="id">'+it.id+'</td><td>'+esc(it.name)+(it.example?'<span class="tag">worked example</span>':'')+'</td>'+
+        '<td><a href="'+SRC+'" aria-label="Source: Pajhwok, 14 October 2026">Pajhwok</a></td><td class="tbc">To be confirmed</td>'+
+        '<td>Day '+it.deadline+(s.late&&s.status!=='Resolved'?' <span class="late">· past</span>':'')+'</td>'+
+        '<td>'+esc(s.level)+'</td><td><span class="badge '+s.cls+'">'+s.status+'</span></td><td>'+esc(s.next)+'</td><td>'+esc(it.evidence)+'</td></tr>';
+    });
+    document.getElementById('rows').innerHTML=rows;
+    document.getElementById('counters').innerHTML=
+      '<div class="ct c-open"><b>'+c.open+'</b><span>Open</span></div><div class="ct c-prog"><b>'+c.prog+'</b><span>In progress</span></div>'+
+      '<div class="ct c-esc"><b>'+c.esc+'</b><span>Escalated</span></div><div class="ct c-res"><b>'+c.res+'</b><span>Resolved</span></div>'+
+      '<div class="ct c-late"><b>'+c.late+'</b><span>Past deadline</span></div>';
+    // steps
+    var sh='', nextMarked=false;
+    STEPS.forEach(function(st){
+      var done=d>=st.day, cls=done?'done':(!nextMarked?'next':'');
+      if(!done&&!nextMarked)nextMarked=true;
+      sh+='<div class="st '+cls+'"><div class="when">'+st.when+'</div><div class="name">'+st.name+'</div><div class="what">'+st.what+'</div></div>';
+    });
+    document.getElementById('steps').innerHTML=sh;
+    // note
+    var open=[], decisions='', progress='', plan='';
+    ISSUES.forEach(function(it,i){ if(states[i].status!=='Resolved') open.push('<li>'+it.id+' '+esc(it.name)+': '+states[i].status.toLowerCase()+', '+esc(states[i].level)+(states[i].late?' (past deadline)':'')+'</li>'); });
+    var r2=states[1];
+    progress = r2.status==='Resolved' ? 'R-02 Substation equipment manufacturers: closed with evidence (approved list).' : 'None yet. Registered issues are being worked through the clock.';
+    decisions = d>=12 ? 'R-02: the joint working group approved a shortlist of substation equipment manufacturers (day 12). Owner to be confirmed.' : 'No decisions recorded yet.';
+    var planItems=[]; ISSUES.forEach(function(it,i){ if(states[i].status!=='Resolved') planItems.push('<li>'+it.id+': '+esc(states[i].next)+'</li>'); });
+    plan = planItems.length?'<ul>'+planItems.join('')+'</ul>':'All registered issues are resolved.';
+    document.getElementById('note').innerHTML=
+      '<div class="ph"><span>Joint status note · draft</span><span>Pilot day '+(d>30?'31':d)+' · illustrative</span></div><dl>'+
+      '<dt>Reporting period</dt><dd>Month 1 of the pilot (illustrative)</dd>'+
+      '<dt>Confirmed progress</dt><dd>'+progress+'</dd>'+
+      '<dt>Open and overdue issues</dt><dd>'+(open.length?(open.length+' open, of which '+c.late+' past deadline<ul>'+open.join('')+'</ul>'):'None')+'</dd>'+
+      '<dt>Decisions and responsible parties</dt><dd>'+decisions+'</dd>'+
+      '<dt>Next steps</dt><dd>'+plan+'</dd>'+
+      '<dt>Agreed figures</dt><dd>MWh delivered, $ billed and % complete, each agreed by both sides before it is reported.</dd>'+
+      '<dt>Winter supply outlook</dt><dd>Added to the October note each year.</dd></dl>';
+  }
+  var days=[1,8,12,15,20,31], bh='';
+  days.forEach(function(x){bh+='<button type="button" class="day" data-day="'+x+'" aria-pressed="false">'+(x===31?'After day 30':'Day '+x)+'</button>'});
+  document.getElementById('btns').innerHTML=bh;
+  document.getElementById('btns').addEventListener('click',function(e){
+    var b=e.target.closest('button.day'); if(!b)return;
+    daySel.value=b.dataset.day; render(Number(b.dataset.day));
+  });
+  daySel.addEventListener('input',function(){render(Number(daySel.value))});
+  render(1);
+})();
+</script>
+</body>
+</html>
