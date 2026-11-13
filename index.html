@@ -201,7 +201,7 @@ footer{margin-top:40px;font-size:14px;color:var(--muted);border-top:1px solid va
 <footer>
   <p><strong>Sources.</strong>
   <a href="https://pajhwok.com/2026/10/14/afghan-uzbek-officials-agree-to-accelerate-surkhan-pul-i-khumri-power-project/">Pajhwok, 14 October 2026</a>: the issues named at the talks ·
-  <a href="https://lex.uz/docs/3591669">Agreement of 5 December 2017, official text (Lex.uz)</a>: Arts. 2, 3, 9, 10, 12 ·
+  <a href="https://lex.uz/ru/docs/3591669">Agreement of 5 December 2017, official text (Lex.uz)</a>: Arts. 2, 3, 9, 10, 12 ·
   <a href="https://www.adb.org/projects/47282-007/main">ADB project 47282-007, Grant 0742-AFG</a>.</p>
   <p>Student project “Diplomatic Mechanisms for Developing Electricity Trade between Central Asia and Afghanistan”, expert committee defense, November 2026 (Birlink programme, Narxoz University). This is a training prototype built from public sources. It is not a document of either side or of ADB, and the statuses on pilot days are simulated.</p>
 </footer>
@@ -210,7 +210,7 @@ footer{margin-top:40px;font-size:14px;color:var(--muted);border-top:1px solid va
 <script>
 (function(){
   var ISSUES=[
-    {id:'R-01',name:'Financing and payment schedule',deadline:15,next:'Agree the schedule',evidence:'Signed payment schedule'},
+    {id:'R-01',name:'Project financing and payments',deadline:15,next:'Agree the payment schedule',evidence:'Signed payment schedule'},
     {id:'R-02',name:'Substation equipment manufacturers',deadline:15,next:'Shortlist the makers',evidence:'Approved list of manufacturers',example:true},
     {id:'R-03',name:'Technical designs and documents',deadline:30,next:'Set a delivery date',evidence:'Approved drawings and documents'},
     {id:'R-04',name:'Document discrepancies',deadline:20,next:'Joint review',evidence:'Signed joint protocol'},
@@ -226,10 +226,10 @@ footer{margin-top:40px;font-size:14px;color:var(--muted);border-top:1px solid va
   var STEPS=[
     {when:'14 Oct 2026',day:0,name:'1. Identified',what:'Named at the talks (Pajhwok). This step is real.'},
     {when:'Day 1',day:1,name:'2. Registered',what:'Entered with its source and a deadline of 15 working days.'},
-    {when:'Day 1',day:1,name:'3. Owner proposed',what:'Owner proposed; both sides confirm it.'},
+    {when:'Day 1',day:1,name:'3. Owner assigned',what:'Owner proposed; both sides confirm it.'},
     {when:'Day 8',day:8,name:'4. Escalated',what:'Still open after 7 working days, so it goes to the joint working group.'},
     {when:'Day 12',day:12,name:'5. Decision recorded',what:'The group approves a shortlist; the decision is attached to the register.'},
-    {when:'Day 15',day:15,name:'6. Implementation checked',what:'The owner confirms the approved list; the issue closes with evidence.'}
+    {when:'Day 15',day:15,name:'6. Implementation verified',what:'The owner confirms the approved list; the issue closes with evidence.'}
   ];
   var daySel=document.getElementById('day');
   function levelIndex(d){for(var i=0;i<LEVELS.length;i++){if(d>=LEVELS[i].min&&d<=LEVELS[i].max)return i}return 3}
