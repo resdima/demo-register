@@ -2,311 +2,803 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Surkhan–Pul-e-Khumri: joint register of open issues (training prototype)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Electricity for Afghanistan</title>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#f8fafd; --surface:#ffffff; --soft:#eef3fa; --line:#d8e0eb;
-  --ink:#0f1e3d; --text:#34404f; --muted:#5d6878;
-  --gold:#f2b705; --gold-ink:#7a5600; --navy:#0f1e3d; --on-navy:#ffffff;
-  --blue:#2f5f8f; --green:#1f6f45; --red:#a32020; --orange:#a8561a;
-  --focus:#2f5f8f;
-  box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+/* VOICE clear, short sentences for leaders; every number with its source
+   IDEA a working control room: each power line is its own 3D model with a live tool beside it
+   PICTURE 3D line models, a 3D "where is each question" board, live cards and one-page reports
+   COLOUR light and dark; each page its own accent (navy, blue, green, violet, teal); status green/amber/grey/red
+   TYPE Figtree 900/800 + Figtree
+   LAYOUT glass top bar (pages, language, theme); hero; sections; phone: one column */
+:root{color-scheme:light;--bg:#f5f6f8;--bg2:#eceff3;--card:#fdfdfe;--ink:#1c2533;--ink2:#3a4556;--mute:#687386;--rule:#dfe3e9;--glass:rgba(245,246,248,.86);--sh:0 6px 22px rgba(28,37,51,.07);--th:#1e3a8a;--th2:#e6edff;--ok:#16a34a;--part:#f59e0b;--nd:#94a3b8;--no:#dc2626;--ex:#fffbeb;--exb:#f3d79a;--exi:#7a5a12}
+:root[data-theme=dark]{color-scheme:dark;--bg:#151a23;--bg2:#1a202b;--card:#1e2533;--ink:#e3e7ee;--ink2:#c2c9d4;--mute:#8e98a9;--rule:#2c3444;--glass:rgba(21,26,35,.86);--sh:0 6px 22px rgba(0,0,0,.28);--th2:#222b3c;--ex:#2b271c;--exb:#4d432a;--exi:#e8c983}
+body[data-p=uz]{--th:#1d6ff2}body[data-p=tj]{--th:#16a34a}body[data-p=tm]{--th:#7c3aed}body[data-p=test]{--th:#0d9488}
+:root[data-theme=dark] body[data-p=project]{--th:#7f97e8}:root[data-theme=dark] body[data-p=uz]{--th:#6a9ce8}:root[data-theme=dark] body[data-p=tj]{--th:#4fb87a}:root[data-theme=dark] body[data-p=tm]{--th:#a593e0}:root[data-theme=dark] body[data-p=test]{--th:#4cbcae}
+body[data-p=uz]{--th2:#e6efff}body[data-p=tj]{--th2:#e3f8ea}body[data-p=tm]{--th2:#efe9ff}body[data-p=test]{--th2:#dcf7f3}
+:root[data-theme=dark] body[data-p]{--th2:#232c3e}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 Figtree,system-ui,sans-serif;overflow-x:clip;transition:background .3s,color .3s}
+a{color:inherit}
+nav.top{position:sticky;top:0;z-index:20;background:var(--glass);backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--rule)}
+nav.top .in{max-width:1400px;margin:0 auto;padding:8px 16px;display:flex;gap:6px 10px;align-items:center;flex-wrap:wrap}
+.logo{font-weight:900;font-size:17px;margin-right:auto;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.logo i{width:28px;height:28px;border-radius:9px;background:var(--th);display:grid;place-items:center;color:#fff;font-style:normal;font-size:15px}
+.pages{display:flex;gap:4px;flex-wrap:wrap}
+.pages a{text-decoration:none;color:var(--mute);font-weight:800;font-size:14.5px;padding:8px 12px;border-radius:20px;white-space:nowrap}
+.pages a:hover{color:var(--ink);background:var(--th2)}
+.pages a[aria-current=page]{background:var(--th);color:#fff}
+.tog{display:flex;gap:4px;align-items:center}
+.tog button{font:inherit;font-weight:800;font-size:13.5px;min-height:36px;min-width:40px;padding:0 10px;border-radius:18px;border:1.5px solid var(--rule);background:var(--card);color:var(--ink);cursor:pointer}
+.tog button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+section.page{display:none}section.page.on{display:block}
+.wrap{max-width:1400px;margin:0 auto;padding:0 max(4vw,16px)}
+.hero{position:relative;overflow:hidden;padding:clamp(28px,3.6vw,52px) 0 24px;background:radial-gradient(900px 380px at 85% -10%,color-mix(in srgb,var(--th) 12%,transparent),transparent 70%),var(--bg)}
+.kick{display:inline-flex;gap:8px;align-items:center;font-weight:800;font-size:13.5px;color:var(--th);background:var(--th2);border:1px solid color-mix(in srgb,var(--th) 30%,transparent);border-radius:20px;padding:5px 12px;margin-bottom:14px}
+h1{font-size:clamp(30px,4.2vw,58px);line-height:1.03;margin:0 0 16px;font-weight:900;letter-spacing:-.025em;text-wrap:balance;max-width:19ch}
+h1 em{font-style:normal;color:var(--th)}
+.lead{font-size:clamp(18px,1.6vw,21px);max-width:62ch;margin:0 0 12px;color:var(--ink2)}
+.by{font-size:15px;color:var(--mute);margin:0}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0 6px}
+.cta a{text-decoration:none;font-weight:800;padding:12px 20px;border-radius:26px;border:1.5px solid var(--rule);background:var(--card)}
+.cta a.pri{background:var(--th);border-color:var(--th);color:#fff}
+h2{font-size:clamp(26px,3vw,40px);line-height:1.08;margin:0 0 10px;font-weight:900;letter-spacing:-.02em;text-wrap:balance}
+h3{font-size:20px;margin:0 0 6px;font-weight:800;line-height:1.25}
+.sec{padding:clamp(26px,3.2vw,46px) 0}
+.sec.alt{background:var(--bg2)}
+.intro{max-width:80ch;color:var(--ink2);margin:0 0 16px}
+.num{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:12px;background:var(--th);color:#fff;font-weight:900;font-size:17px;margin-right:12px;vertical-align:5px}
+.src{font-size:13.5px;color:var(--mute);margin:10px 0 0}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:20px;box-shadow:var(--sh)}
+.pad{padding:16px 18px}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s,transform .6s}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+.hgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,3vw,44px);align-items:center}.hgrid .facts{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:0}.hgrid h1{max-width:none}
+.tchips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.tchips div{display:flex;gap:10px;align-items:center;padding:14px 16px;font-weight:800}.tchips i{width:30px;height:30px;border-radius:15px;display:grid;place-items:center;font-style:normal;color:#fff;background:var(--nd);flex:none;transition:background .3s}.tchips i.ok{background:var(--ok)}
+@media(max-width:980px){.hgrid{grid-template-columns:minmax(0,1fr)}}
+.sum3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 0}
+.sum3 div{background:var(--card);border:1px solid var(--rule);border-radius:18px;padding:14px 16px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.sum3 div::before{content:"";position:absolute;inset:0 0 auto;height:4px;background:var(--th)}
+.sum3 b{display:block;font-size:17px;margin-bottom:3px}.sum3 span{font-size:15.5px;color:var(--ink2)}
+.fig{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--rule);background:var(--figbg,linear-gradient(#eef2f6,#e3e8ef))}
+:root[data-theme=dark] .fig{--figbg:linear-gradient(#1b2230,#171d29)}
+.fig canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.fig .hint{position:absolute;right:10px;bottom:10px;font-size:13px;background:var(--glass);border-radius:12px;padding:3px 10px;color:var(--mute);pointer-events:none}
+.fig .ttl{position:absolute;left:12px;top:10px;font-size:14px;font-weight:800;background:var(--glass);border-radius:12px;padding:4px 12px;pointer-events:none}
+.fig.drag{cursor:grab;touch-action:pan-y}.jfig{width:100%;aspect-ratio:3/1;margin-top:14px}@media(max-width:600px){.jfig .ttl{display:none}}@media(max-width:900px){.jfig{aspect-ratio:2.4/1}}@media(max-width:520px){.jfig{aspect-ratio:1.7/1}}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}@media(max-width:1150px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.stats{grid-template-columns:minmax(0,1fr)}}
+.stat{padding:18px}
+.stat .k{font-size:14px;font-weight:800;color:var(--mute)}
+.stat .v{font-size:clamp(44px,5vw,64px);font-weight:900;line-height:1;color:var(--th);margin:8px 0 2px;font-variant-numeric:tabular-nums}
+.stat .u{font-weight:800;font-size:16px;margin-bottom:6px}
+.stat p{margin:0;font-size:15.5px;color:var(--ink2)}
+.ppl{display:flex;gap:4px;margin:12px 0 6px}
+.ppl svg{width:22px;height:30px}
+.bar{display:flex;height:16px;border-radius:8px;overflow:hidden;margin:12px 0 6px;background:var(--rule)}
+.bar i{display:block;height:100%}
+.bar+.lg{display:flex;justify-content:space-between;font-size:13px;color:var(--mute);font-weight:700}
+.yr{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin:12px 0 6px}
+.yr i{height:16px;border-radius:4px;background:var(--rule)}
+.yr i.s{background:var(--th)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{border:1px solid var(--rule);border-radius:20px;padding:7px 14px;font-weight:700;font-size:15px;background:var(--card)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}@media(min-width:1500px){.grid2{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:700px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.clash h3{font-size:17px}
+.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}
+.vs div{background:var(--bg2);border:1px solid var(--rule);border-radius:12px;padding:8px 10px;font-size:15px}
+.vs i{font-style:normal;font-weight:900;color:var(--no);font-size:22px}
+.clash p{margin:8px 0 0;font-size:15px;color:#d97706;font-weight:700}
+.note{background:var(--th2);border-left:5px solid var(--th);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.band{background:var(--th);color:#fff;border-radius:24px;padding:clamp(24px,3vw,44px);text-align:center;box-shadow:var(--sh)}
+.band small{display:block;font-weight:800;opacity:.85;margin-bottom:10px;font-size:13.5px;letter-spacing:.06em}
+.band b{font-size:clamp(22px,2.8vw,36px);line-height:1.2;font-weight:900;text-wrap:balance;display:block}
+.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.step{padding:16px;position:relative}
+.step .tag{font-size:13px;font-weight:900;color:var(--th);letter-spacing:.04em}
+.step h3{font-size:21px;margin:2px 0 6px}
+.step p{margin:0 0 10px;font-size:16px;color:var(--ink2)}
+.ex{background:var(--ex);border:1px solid var(--exb);border-radius:12px;padding:8px 10px;font-size:15px}
+.ex b{color:var(--exi)}
+.pic{height:120px;border-radius:14px;background:var(--bg2);border:1px solid var(--rule);margin-bottom:12px;display:grid;place-items:center;overflow:hidden}
+.mcard{width:150px;border:2px solid var(--ink);border-radius:8px;background:var(--card);font-size:11px;font-weight:800}
+.mcard div{display:flex;align-items:center;gap:6px;padding:2px 6px;border-top:1px solid var(--rule)}
+.mcard div:first-child{border-top:0;background:var(--ink);color:var(--bg)}
+.mcard i{width:12px;height:12px;border-radius:6px;display:inline-block}
+.mlist{width:170px;background:var(--card);border:1.5px solid var(--ink);border-radius:6px;font-size:10.5px;font-weight:700}
+.mlist div{padding:2px 6px;border-top:1px solid var(--rule);display:flex;justify-content:space-between}
+.mlist div:first-child{background:var(--ink);color:var(--bg);border:0}
+.mclock{display:flex;align-items:flex-end;gap:6px}
+.mclock span{width:38px;border-radius:6px 6px 0 0;color:#fff;font-weight:900;font-size:12px;text-align:center;padding-top:4px}
+.mpage{width:96px;height:100px;background:#fffbeb;border:1.5px solid #b7791f;border-radius:4px;padding:8px}
+.mpage i{display:block;height:5px;background:#e8cf91;border-radius:3px;margin:6px 0}
+.cyc{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:20px;align-items:center;margin-top:26px;padding:18px}
+.cyc svg{width:100%;height:auto}.cyc p{margin:0 0 6px}
+.cyc .rect{fill:var(--card);stroke:var(--th)}.cyc .txt{fill:var(--ink)}.cyc .sub{fill:var(--mute)}.cyc .ring{stroke:color-mix(in srgb,var(--th) 25%,transparent)}.cyc .arr{stroke:var(--th)}.cyc .ah{fill:var(--th)}
+.cols4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.col{padding:12px 14px;border-top:6px solid}
+.col b{font-size:19px}.col span{display:block;font-size:15px;color:var(--ink2)}
+.ladder{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}@media(max-width:700px){.ladder{grid-template-columns:minmax(0,1fr)}}
+.ladder div{display:grid;grid-template-columns:60px 1fr;gap:2px 12px;padding:12px 16px}
+.ladder b{grid-row:span 2;font-size:26px;font-weight:900;color:var(--th)}
+.ladder span{font-size:15px;color:var(--mute)}
+.go3{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.go3 a{display:block;text-decoration:none;padding:18px}
+.go3 a:hover{border-color:var(--th)}
+.go3 b{display:block;font-size:19px}.go3 span{color:var(--mute);font-size:15px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:20px}
+.fact{padding:14px 16px}
+.fact b{display:block;font-size:22px;font-weight:900;color:var(--th);line-height:1.15}
+.fact span{font-size:15px;color:var(--ink2)}
+.split{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;align-items:stretch}.split>.fig{aspect-ratio:2.2/1;min-height:0}@media(max-width:700px){.split>.fig{aspect-ratio:1.4/1}}
+.card5{overflow:hidden}
+.card5 .hd{background:var(--ink);color:var(--bg);padding:11px 16px;font-weight:800;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.card5 .hd span{opacity:.75;font-weight:600;font-size:14px}
+.ck{display:grid;grid-template-columns:32px minmax(0,1fr) auto;gap:2px 10px;align-items:center;padding:10px 14px;border-top:1px solid var(--rule);background:transparent;color:inherit;font:inherit;text-align:left;width:100%;border-left:0;border-right:0;border-bottom:0;cursor:pointer}
+.ck:first-of-type{border-top:0}
+.ck:hover,.ck.on{background:var(--th2)}
+.ck.chg{background:color-mix(in srgb,var(--part) 14%,transparent)}
+.l{width:30px;height:30px;border-radius:15px;display:grid;place-items:center;font-weight:900;color:#fff;font-size:14px}
+.ck .t{font-weight:800;font-size:15.5px}
+.ck .n{grid-column:2/4;font-size:14.5px;color:var(--mute)}
+.pill{display:inline-block;font-size:13px;font-weight:800;border-radius:13px;padding:3px 11px;white-space:nowrap;color:#fff}
+.btn{font:inherit;font-weight:800;font-size:15.5px;min-height:46px;padding:0 18px;border-radius:23px;border:1.5px solid var(--rule);background:var(--card);color:var(--ink);cursor:pointer;transition:transform .1s}
+.btn:active{transform:scale(.97)}
+.btn.pri{background:var(--th);border-color:var(--th);color:#fff}
+.btn.sel{border-color:var(--th);background:var(--th2)}
+.btn:disabled{opacity:.4;cursor:default}
+button:focus-visible,a:focus-visible{outline:3px solid var(--th);outline-offset:2px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* mobile + full screen */
+.fsb{position:absolute;right:10px;top:10px;z-index:4;width:44px;height:44px;border-radius:22px;border:1px solid var(--rule);background:var(--glass);backdrop-filter:blur(8px);color:var(--ink);font:inherit;font-size:20px;font-weight:900;cursor:pointer;display:grid;place-items:center;box-shadow:var(--sh)}
+.fsb:hover{border-color:var(--th)}
+.fstip{display:none}
+.fig.full{position:fixed!important;inset:0!important;z-index:200!important;width:100vw!important;height:100vh!important;height:100dvh!important;aspect-ratio:auto!important;border-radius:0!important;border:0!important;margin:0!important;top:0!important}
+.fig.full .fsb{top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right))}
+.fig.full .fstip{display:block;position:absolute;left:50%;bottom:max(16px,env(safe-area-inset-bottom));transform:translateX(-50%);font-size:13px;font-weight:800;background:var(--glass);border-radius:14px;padding:6px 14px;color:var(--ink);white-space:nowrap;pointer-events:none}
+@media(orientation:landscape){.fig.full .fstip{display:none}}
+body.fsopen{overflow:hidden}
+@media(max-width:700px){
+ nav.top .in{padding:6px 12px;gap:6px}
+ .logo{font-size:14.5px;flex:1;min-width:0;margin-right:0}.logo>span{overflow:hidden;text-overflow:ellipsis}.logo i{width:24px;height:24px;font-size:13px;flex:none}.tog{flex:none}
+ .tog{order:2}.tog button{min-height:32px;min-width:34px;padding:0 8px;font-size:12.5px}
+ .pages{order:3;width:100%;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:0 -12px;padding:0 12px 2px}
+ .pages::-webkit-scrollbar{display:none}
+ .pages a{font-size:13.5px;padding:6px 11px;flex:none}
+ .split>.fig{aspect-ratio:1/1}
+ .fig .hint{display:none}
 }
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#0c1426; --surface:#131d33; --soft:#1a2742; --line:#2b3a5a;
-    --ink:#f2f5fb; --text:#d3dbe9; --muted:#9db0cc;
-    --gold:#f2b705; --gold-ink:#f2b705; --navy:#1a2742; --on-navy:#ffffff;
-    --blue:#8fb6e3; --green:#6fcf9b; --red:#ff8d8d; --orange:#f0a36a; --focus:#8fb6e3;
-  }
+@media(max-width:520px){.tool2 .ctl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;width:100%}.tool2 .ctl .btn{padding:0 4px;font-size:13.5px;min-height:40px;white-space:nowrap}.tool2 .ctl .btn:first-child{grid-column:1/-1}
+section .season{display:flex;width:100%}section .season button{flex:1;font-size:14px;padding:0 6px;min-height:42px;white-space:nowrap}
+.fig[style*="aspect-ratio:5/4"]{aspect-ratio:1/1!important}}
+@media(max-width:520px){.ck{grid-template-columns:32px minmax(0,1fr)}.ck>.pill{grid-column:2;justify-self:start}.ck .n{grid-column:2}}
+/* tool */
+
+/* focus mode: one screen */
+.card.tool2.tfull{display:flex;flex-direction:column;overflow:hidden}
+.tool2.tfull .tbar{flex:none;position:relative}
+.tool2.tfull .tgrid{flex:1;min-height:0;width:100%;grid-template-rows:minmax(0,1fr);align-items:stretch;padding-bottom:max(14px,env(safe-area-inset-bottom))}
+.tool2.tfull .tgrid .jfig{position:relative;top:auto;height:auto;min-height:0;aspect-ratio:auto;align-self:stretch}
+.tool2.tfull .qlist{overflow-y:auto;min-height:0;overscroll-behavior:contain}
+.qsh{display:none}
+@media(max-width:1100px){
+ .tool2.tfull .tgrid{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:10px}
+ .tool2.tfull .tgrid .jfig{box-shadow:none}
+ .tool2.tfull .qlist{gap:6px;overflow:visible}
+ .tool2.tfull .qr{grid-template-columns:28px minmax(0,1fr) auto auto;align-items:center;gap:4px 8px;padding:8px 10px}
+ .tool2.tfull .qr .l{width:28px;height:28px;font-size:13px}
+ .tool2.tfull .qr .q,.tool2.tfull .qr .to,.tool2.tfull .qr .steps,.tool2.tfull .qnote{display:none}
+ .tool2.tfull .qr .qsh{display:block;font-weight:800;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .tool2.tfull .qr>.pill{grid-column:4;grid-row:1;margin:0;justify-self:end;font-size:12px;padding:3px 9px}
+ .tool2.tfull .qr .sline{display:contents}
+ .tool2.tfull .qr .sline em{grid-column:3;grid-row:1;font-size:12px;white-space:nowrap}
+ .tool2.tfull .qr .seg{display:none;grid-column:2/-1;grid-row:2;justify-self:start}
+ .tool2.tfull.paused .qr.live .seg{display:inline-flex}
 }
-:root[data-theme="dark"]{
-  --bg:#0c1426; --surface:#131d33; --soft:#1a2742; --line:#2b3a5a;
-  --ink:#f2f5fb; --text:#d3dbe9; --muted:#9db0cc;
-  --gold:#f2b705; --gold-ink:#f2b705; --navy:#1a2742; --on-navy:#ffffff;
-  --blue:#8fb6e3; --green:#6fcf9b; --red:#ff8d8d; --orange:#f0a36a; --focus:#8fb6e3;
+@media(max-width:700px){
+ .tool2.tfull .tbar{grid-template-columns:minmax(0,1fr);padding:10px 12px 0;gap:6px}
+ .tool2.tfull .dayw b{font-size:28px}.tool2.tfull .dayw span{font-size:10.5px}
+ .tool2.tfull .ctl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;width:100%}
+ .tool2.tfull .ctl .btn{min-height:38px;font-size:12.5px;padding:0 2px}
+ .tool2.tfull .tclose{position:absolute;top:max(8px,env(safe-area-inset-top));right:12px;width:40px;min-height:40px!important;height:40px}
+ .tool2.tfull .tbar .tl{margin:8px 8px 24px}
+ .tool2.tfull .tgrid{padding:8px 10px max(10px,env(safe-area-inset-bottom))}
+ .tool2.tfull .qr>.pill{display:none}
+ .tool2.tfull .qr{grid-template-columns:28px minmax(0,1fr) auto}
 }
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:17px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;-webkit-text-size-adjust:100%}
-.wrap{max-width:1120px;margin:0 auto;padding:0 20px 56px}
-.banner{background:var(--navy);color:var(--on-navy);font-size:14px;letter-spacing:.06em;text-transform:uppercase;padding:10px 20px;text-align:center}
-header{padding:28px 0 8px}
-h1{font:700 clamp(26px,4vw,38px)/1.15 Georgia,"Times New Roman",serif;color:var(--ink);margin:0 0 10px}
-h2{font:700 clamp(22px,3vw,28px)/1.2 Georgia,"Times New Roman",serif;color:var(--ink);margin:0 0 6px}
-h3{font-size:18px;color:var(--ink);margin:0 0 6px}
-.lead{margin:0 0 14px;color:var(--text);max-width:820px}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 0}
-.chip{background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:14px;color:var(--text)}
-.eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-ink);font-weight:700;margin:34px 0 4px}
-section{margin-top:6px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
-.clockbox{display:grid;gap:16px}
-.sliderrow{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
-.sliderrow label{font-weight:700;color:var(--ink)}
-input[type=range]{flex:1 1 320px;min-width:200px;accent-color:var(--gold);height:32px}
-.dayval{font:700 22px Georgia,serif;color:var(--ink);min-width:150px}
-.btns{display:flex;flex-wrap:wrap;gap:8px}
-button.day{font:600 16px inherit;font-family:inherit;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:9px 16px;cursor:pointer;min-height:44px}
-button.day[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#0f1e3d}
-button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-.levels{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.lv{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--surface)}
-.lv .d{font:700 18px Georgia,serif;color:var(--ink)}
-.lv .w{font-weight:700;color:var(--ink);font-size:16px}
-.lv .o{font-size:15px;color:var(--muted)}
-.lv.on{background:var(--gold);border-color:var(--gold)}
-.lv.on .d,.lv.on .w,.lv.on .o{color:#0f1e3d}
-.note{font-size:15px;color:var(--muted)}
-.counters{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
-.ct{flex:1 1 140px;border:1px solid var(--line);border-left-width:5px;border-radius:12px;padding:10px 14px;background:var(--surface)}
-.ct b{font:700 28px Georgia,serif;color:var(--ink);display:block;line-height:1.1}
-.ct span{font-size:15px;color:var(--muted)}
-.c-open{border-left-color:var(--muted)}.c-prog{border-left-color:var(--blue)}.c-esc{border-left-color:var(--orange)}.c-res{border-left-color:var(--green)}.c-late{border-left-color:var(--red)}
-.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
-table{border-collapse:collapse;width:100%;min-width:760px;font-size:15.5px}
-th{background:var(--navy);color:var(--on-navy);text-align:left;font-size:13px;letter-spacing:.08em;text-transform:uppercase;padding:11px 8px;white-space:nowrap}
-td{padding:11px 8px;border-top:1px solid var(--line);vertical-align:top}
-tr.ex td:first-child{box-shadow:inset 4px 0 0 var(--gold)}
-td.id{font-weight:700;color:var(--ink);white-space:nowrap}
-.tbc{font-style:italic;color:var(--muted)}
-.badge{display:inline-block;border-radius:999px;padding:3px 11px;font-size:14px;font-weight:700;border:1px solid}
-.b-open{color:var(--muted);border-color:var(--muted)}.b-prog{color:var(--blue);border-color:var(--blue)}.b-esc{color:var(--orange);border-color:var(--orange)}.b-res{color:var(--green);border-color:var(--green)}
-.late{color:var(--red);font-weight:700}
-.tag{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-ink);font-weight:700;margin-left:6px}
-.legend{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
-.legend div{font-size:15px;color:var(--muted)}
-.steps{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
-.st{border:1px solid var(--line);border-top:5px solid var(--line);border-radius:12px;background:var(--surface);padding:12px}
-.st .when{font-size:14px;color:var(--muted)}
-.st .name{font-weight:700;color:var(--ink);margin:2px 0 4px}
-.st .what{font-size:15px;color:var(--text)}
-.st.done{border-top-color:var(--green)}
-.st.next{border-top-color:var(--gold)}
-.paper{background:var(--surface);border:2px solid var(--ink);border-radius:6px;max-width:860px}
-.paper .ph{background:var(--navy);color:var(--on-navy);padding:10px 16px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
-.paper dl{margin:0;padding:6px 16px 14px;display:grid;grid-template-columns:minmax(150px,230px) 1fr;gap:0}
-.paper dt{font-weight:700;color:var(--ink);padding:9px 12px 9px 0;border-top:1px solid var(--line)}
-.paper dd{margin:0;padding:9px 0;border-top:1px solid var(--line)}
-.paper dd ul{margin:0;padding-left:20px}
-.rule{margin:12px 0 0;font-size:15px;color:var(--muted);max-width:860px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.two ul{margin:6px 0 0;padding-left:22px}
-.two li{margin:5px 0}
-a{color:var(--blue)}
-footer{margin-top:40px;font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
-@media (max-width:860px){
-  .levels,.legend{grid-template-columns:1fr 1fr}
-  .steps{grid-template-columns:1fr 1fr}
-  .two{grid-template-columns:1fr}
-  .paper dl{grid-template-columns:1fr}
-  .paper dt{border-top:1px solid var(--line);padding-bottom:0}
-  .paper dd{border-top:none;padding-top:2px}
+
+@media(max-width:700px){
+ .tool2.tfull .fsb{display:none}
+ .tool2.tfull .tbar{grid-template-columns:auto minmax(0,1fr);align-items:center;padding:8px 12px 0;gap:4px 10px}
+ .tool2.tfull .dayw{flex-direction:column;align-items:flex-start;gap:0;min-width:0}
+ .tool2.tfull .dayw b{font-size:28px}.tool2.tfull .dayw span{font-size:10px;letter-spacing:.05em}
+ .tool2.tfull .ctl{display:flex!important;flex-wrap:nowrap;justify-content:flex-end;gap:5px;width:auto}
+ .tool2.tfull .ctl .btn[data-a^="d1"],.tool2.tfull .ctl .btn[data-a^="d7"]{display:none}
+ .tool2.tfull .ctl .btn{min-height:40px;font-size:13.5px;padding:0 11px;flex:none}
+ .tool2.tfull .tclose{position:static;width:40px;padding:0!important}
+ .tool2.tfull .tbar .tl{margin:6px 8px 20px;height:4px}
+ .tool2.tfull .tbar .tl b{width:14px;height:14px;top:-5px}
+ .tool2.tfull .tbar .tl span{font-size:11px}
+ .tool2.tfull .tgrid{padding:6px 8px max(8px,env(safe-area-inset-bottom));gap:8px}
+ .tool2.tfull .tgrid .jfig{border-radius:14px}
+ .tool2.tfull .tgrid .jfig .ttl{display:none}
+ .tool2.tfull .qlist{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+ .tool2.tfull .qr{grid-template-columns:24px minmax(0,1fr);gap:1px 8px;padding:7px 9px;border-radius:12px}
+ .tool2.tfull .qr .l{width:24px;height:24px;font-size:12px;grid-row:1/3;align-self:center}
+ .tool2.tfull .qr .qsh{font-size:13px;white-space:normal;line-height:1.2}
+ .tool2.tfull .qr .sline em{display:inline-flex;grid-column:2;grid-row:2;font-size:11.5px;gap:5px}
+ .tool2.tfull .qr .sline em:before{width:7px;height:7px}
+ .tool2.tfull.paused .qlist{grid-template-columns:1fr}
+ .tool2.tfull.paused .qr{grid-template-columns:24px minmax(0,1fr) auto}
+ .tool2.tfull.paused .qr .sline em{grid-column:3;grid-row:1}
+ .tool2.tfull.paused .qr .seg{grid-column:2/-1;grid-row:2;margin-top:4px}
+ .tool2.tfull.paused .qr .seg button{padding:5px 9px}
 }
-@media (max-width:520px){ .levels,.legend,.steps{grid-template-columns:1fr} body{font-size:16px} }
+/* before / after: merged view on phones */
+.bam{display:none;overflow:hidden}
+.bam .hd{background:var(--ink);color:var(--bg);padding:11px 14px;font-weight:800}
+.bmh{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:9px 12px;font-size:11.5px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);border-bottom:1px solid var(--rule);position:sticky;top:0}
+.bmh span:last-child{color:var(--th)}
+.bmr{padding:12px;border-top:1px solid var(--rule)}
+.bmh+.bmr{border-top:0}
+.bq{display:flex;align-items:flex-start;gap:9px;margin-bottom:9px}
+.bq .l{width:24px;height:24px;font-size:12px;flex:none}
+.bq b{font-size:14.5px;line-height:1.3;padding-top:2px}
+.bc{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bx{border:1px solid var(--rule);border-radius:12px;padding:8px 9px;min-width:0}
+.bx .pill{font-size:11.5px;padding:3px 8px;white-space:normal;line-height:1.2}
+.bx p{margin:6px 0 0;font-size:12.5px;line-height:1.4;color:var(--mute)}
+.bx p em{font-style:normal;font-weight:700}
+.bx.new{border-color:var(--th);background:color-mix(in srgb,var(--th) 10%,transparent)}
+.bx.new p{color:var(--ink)}
+@media(max-width:900px){.bam{display:block}.bafull{display:none!important}}
+
+.card.tool2.tfull{position:fixed;inset:0;z-index:150;border-radius:0;border:0;margin:0;background:var(--card);box-shadow:none}
+.tool2.tfull .tbar{max-width:1600px;margin:0 auto;width:100%;padding-top:max(14px,env(safe-area-inset-top))}
+.tool2.tfull .tgrid{max-width:1600px;margin:0 auto}
+.tclose{min-width:44px;padding:0 14px!important;font-size:17px!important;background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important}
+.tool2.tfull .ctl .btn[data-a^="send"][disabled]{display:none}
+
+
+/* tool v2 — control room */
+.tool2{padding:0;overflow:visible}
+.tbar{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 22px;align-items:center;padding:14px 20px 2px;border-bottom:1px solid var(--rule)}
+.dayw{display:flex;align-items:baseline;gap:10px;min-width:150px}
+.dayw span{font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.dayw b{font-size:36px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums;color:var(--th);letter-spacing:-.02em}
+.ctl{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.ctl .btn{min-height:40px;font-size:14.5px;padding:0 16px}
+.tbar .tl{grid-column:1/-1;margin:10px 8px 28px;height:6px}
+.tbar .tl b{top:-6px;width:18px;height:18px}
+.tgrid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:14px;padding:14px;align-items:stretch}
+.tgrid .jfig{margin:0;aspect-ratio:auto;align-self:start;position:sticky;top:calc(var(--navh,56px) + 12px);height:clamp(380px,calc(100vh - var(--navh,56px) - 32px),580px)}
+.qlist{display:flex;flex-direction:column;gap:8px}
+.qr{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 12px;align-items:start;padding:10px 12px;border:1px solid var(--rule);border-radius:14px;background:var(--bg2);transition:border-color .2s,box-shadow .2s}
+.qr.live{border-color:color-mix(in srgb,var(--sc) 55%,var(--rule));box-shadow:0 0 0 3px color-mix(in srgb,var(--sc) 14%,transparent)}
+.qr .l{width:32px;height:32px}
+.qr .q{font-weight:800;font-size:14.5px;line-height:1.35}
+.qr .to{font-size:12.5px;color:var(--mute);margin-top:2px}
+.qr .pill{margin-top:4px}
+.steps{grid-column:2/-1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;margin-top:6px}
+.steps i{display:block;height:6px;border-radius:3px;background:var(--rule)}
+.sline{grid-column:2/-1;display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;font-size:12.5px;font-weight:800;color:var(--mute)}
+.sline em{font-style:normal;display:inline-flex;align-items:center;gap:6px;color:var(--ink)}
+.sline em:before{content:"";width:8px;height:8px;border-radius:4px;background:var(--sc)}
+.seg{display:inline-flex;border:1.5px solid var(--rule);border-radius:16px;overflow:hidden;background:var(--card)}
+.seg button{font:inherit;font-size:12.5px;font-weight:800;padding:5px 10px;border:0;background:none;color:var(--ink);cursor:pointer;white-space:nowrap}
+.seg button+button{border-left:1.5px solid var(--rule)}
+.seg button:hover{background:var(--th2)}
+.qnote{font-size:12.5px;color:var(--mute);margin:2px 4px 0;line-height:1.5}
+.qstart{padding:12px 14px;border-radius:14px;background:var(--th2);font-size:14px;font-weight:700}
+@media(max-width:1100px){.tgrid{grid-template-columns:minmax(0,1fr)}.tgrid .jfig{min-height:0;height:auto;aspect-ratio:2.6/1;position:sticky;top:calc(var(--navh,56px) + 8px);z-index:3;box-shadow:var(--sh)}}
+@media(max-width:700px){.tbar{grid-template-columns:minmax(0,1fr);padding:14px 14px 4px}.dayw{flex-direction:row;align-items:baseline;gap:10px}.dayw b{font-size:34px}.ctl{justify-content:flex-start}.ctl .btn{flex:1 1 auto;padding:0 12px}.tgrid{padding:10px;gap:10px}.tgrid .jfig{aspect-ratio:1.7/1}.qr{grid-template-columns:auto minmax(0,1fr)}.qr>.pill{grid-column:2;justify-self:start;margin-top:2px}.seg button{padding:5px 8px}.tbar .tl span em{display:none}}
+
+.tool{padding:16px 18px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.day{display:flex;align-items:baseline;gap:10px}
+.day b{font-size:40px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums;color:var(--th)}
+.day span{font-size:14px;font-weight:800;color:var(--mute)}
+.tl{position:relative;height:10px;border-radius:5px;background:var(--rule);margin:16px 6px 30px}
+.tl i{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--th);transition:width .25s}
+.tl b{position:absolute;top:-5px;width:20px;height:20px;border-radius:10px;background:var(--card);border:3px solid var(--rule);transform:translateX(-50%)}
+.tl b.on{border-color:var(--th);background:var(--th)}
+.tl span em{font-style:normal}.tl span{position:absolute;top:20px;font-size:12.5px;font-weight:800;color:var(--mute);transform:translateX(-50%);white-space:nowrap}
+.trk{width:100%;border-collapse:separate;border-spacing:0;font-size:15px}
+.trk th{text-align:left;font-size:13px;color:var(--mute);font-weight:800;padding:6px 8px;border-bottom:1px solid var(--rule)}
+.trk td{padding:10px 8px;border-bottom:1px solid var(--rule);vertical-align:middle}
+.trk .q{font-weight:800}
+.trk .to{font-size:13.5px;color:var(--mute)}
+.lane{display:grid;grid-template-columns:repeat(5,auto);gap:3px}
+.lane i{font-style:normal;font-size:11.5px;font-weight:800;text-align:center;padding:5px 7px;border-radius:8px;background:var(--bg2);color:var(--mute);border:1px solid var(--rule);white-space:nowrap}
+.lane i.on{color:#fff;border-color:transparent;box-shadow:0 0 0 3px color-mix(in srgb,var(--th) 25%,transparent)}
+.rep{display:flex;gap:4px;flex-wrap:nowrap}
+.rep button{white-space:nowrap;font:inherit;font-size:13px;font-weight:800;min-height:34px;padding:0 10px;border-radius:17px;border:1.5px solid var(--rule);background:var(--card);color:var(--ink);cursor:pointer}
+.rep button:hover{border-color:var(--th)}
+.trk.ghost tbody{opacity:.75}.empty{padding:22px;text-align:center;color:var(--mute);border:2px dashed var(--rule);border-radius:16px}
+.ba{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.arrow{font-weight:900;color:var(--th)}
+.page1{background:var(--ex);border:1.5px solid var(--exb);border-radius:16px;padding:16px 20px;box-shadow:var(--sh)}
+.page1 h4{margin:0 0 8px;font-size:12.5px;letter-spacing:.06em;color:var(--exi)}
+.page1 p{margin:5px 0}
+.cmp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.cmp>div{padding:16px}.cmp p{margin:0}
+.mini3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.mini3>div{padding:14px;border:2px solid var(--rule);border-radius:16px;background:var(--card);transition:border-color .3s}
+.mini3>div.hit{border-color:var(--no)}
+.dots{display:flex;gap:5px;margin-top:8px}
+.dots i{width:26px;height:26px;border-radius:13px;display:grid;place-items:center;font-style:normal;font-weight:900;font-size:12px;color:#fff}
+.tests{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+.test{padding:14px 16px;border:1.5px solid var(--rule)}
+.test.pass{border-color:var(--ok)}
+.test .top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.test b{font-size:18px}
+.test .why{color:var(--mute);margin:2px 0 0;font-size:15.5px}
+.res{list-style:none;padding:0;margin:8px 0 0;font-size:15.5px}
+.res li{padding:2px 0 2px 26px;position:relative}
+.res li::before{position:absolute;left:0;font-weight:900}
+.res li.p::before{content:"✓";color:var(--ok)}.res li.f::before{content:"✗";color:var(--no)}
+.score{font-size:clamp(26px,3.6vw,42px);font-weight:900;color:var(--th)}
+.tline{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}@media(max-width:820px){.tline{grid-template-columns:minmax(0,1fr)}}
+.tline div{display:grid;grid-template-columns:46px 1fr;gap:2px 12px;padding:12px 16px}
+.tline b{grid-row:span 3;width:38px;height:38px;border-radius:12px;background:var(--th);color:#fff;display:grid;place-items:center;font-weight:900}
+.tline strong{font-size:18px}.tline em{font-style:normal;color:var(--th);font-weight:800;font-size:15px}
+.nextp{display:flex;justify-content:flex-end;padding:28px 0 44px}
+.nextp a{font-weight:900;font-size:18px;text-decoration:none;color:#fff;background:var(--th);border-radius:28px;padding:13px 24px;box-shadow:var(--sh)}
+footer{border-top:1px solid var(--rule);padding:20px 0 32px;color:var(--mute);font-size:14px}
+.season{display:inline-flex;border:1.5px solid var(--rule);border-radius:24px;overflow:hidden;background:var(--card)}
+.season button{font:inherit;font-weight:800;min-height:44px;padding:0 16px;border:0;background:none;color:var(--ink);cursor:pointer}
+.season button[aria-pressed=true]{background:var(--th);color:#fff}
+@media(min-width:1600px){body{font-size:18px}.wrap,nav.top .in{max-width:1560px}}
+@media(max-width:1000px){.flow,.cols4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:880px){.split,.cyc{grid-template-columns:minmax(0,1fr)}.mini3{grid-template-columns:minmax(0,1fr)}.sum3{grid-template-columns:minmax(0,1fr)}.trk thead{display:none}.trk tr{display:grid;grid-template-columns:minmax(0,1fr);border-bottom:1px solid var(--rule);padding:8px 0}.trk td{border:0;padding:4px 2px}.lane{grid-template-columns:auto;justify-content:start}.lane i:not(.on){display:none}.tl span em{display:none}}
+@media(max-width:620px){.flow,.cols4,.ba,.cmp{grid-template-columns:minmax(0,1fr)}.logo{width:100%}.pages a{padding:6px 9px;font-size:13.5px}.vs{grid-template-columns:1fr}.vs i{text-align:center}}
 </style>
 </head>
-<body>
-<div class="banner">Training prototype · built from public sources · not an official record</div>
-<div class="wrap">
-<header>
-  <h1>Surkhan–Pul-e-Khumri line: joint register of open issues</h1>
-  <p class="lead">A working demonstration of the procedure proposed for a 90-day pilot: one list of open issues, one clock that moves them upward, and one page that both sides agree on.</p>
-  <div class="chips">
-    <span class="chip">Issues: named at the talks of 14 October 2026</span>
-    <span class="chip">Owners: to be confirmed by the sides (Art. 2)</span>
-    <span class="chip">Access: confidential by default (Art. 10)</span>
-  </div>
-</header>
-
-<section aria-labelledby="clock-h">
-  <p class="eyebrow">One clock</p>
-  <h2 id="clock-h">Move the clock to see how open issues escalate</h2>
-  <div class="card clockbox">
-    <div class="sliderrow">
-      <label for="day">Pilot day</label>
-      <input id="day" type="range" min="1" max="31" step="1" value="1" aria-describedby="daynote">
-      <div class="dayval" id="dayval" aria-live="polite">Day 1</div>
-    </div>
-    <div class="btns" id="btns" role="group" aria-label="Jump to a pilot day"></div>
-    <div class="levels" id="levels"></div>
-    <p class="note" id="daynote">Illustration. Working days after registration. The worked example R-02 follows the six steps below; the other four issues stay unresolved so that the whole escalation path is visible. Deadlines are proposed pilot parameters, not current obligations. All statuses on pilot days are simulated.</p>
-  </div>
-</section>
-
-<section aria-labelledby="list-h">
-  <p class="eyebrow">One list</p>
-  <h2 id="list-h">The register on <span id="regday">pilot day 1</span></h2>
-  <div class="counters" id="counters" aria-live="polite"></div>
-  <div class="tablewrap" tabindex="0" role="region" aria-label="Register of open issues (scrolls sideways on small screens)">
-    <table>
-      <thead><tr><th>ID</th><th>Open issue</th><th>Source</th><th>Proposed owner</th><th>Deadline</th><th>Level now</th><th>Status</th><th>Next step</th><th>Evidence to close</th></tr></thead>
-      <tbody id="rows"></tbody>
-    </table>
-  </div>
-  <h3 style="margin-top:22px">Process items, tracked outside the clock</h3>
-  <div class="tablewrap" tabindex="0" role="region" aria-label="Process items">
-    <table>
-      <thead><tr><th>ID</th><th>Item</th><th>Basis</th><th>Proposed owner</th><th>When</th><th>Status</th><th>Evidence to close</th></tr></thead>
-      <tbody>
-        <tr><td class="id">P-01</td><td>Confirm the competent bodies and name two contacts per side (Step 0)</td><td>2017 agreement, Art. 2: changes are notified through diplomatic channels</td><td class="tbc">Both sides, through diplomatic channels</td><td>Month 0</td><td><span class="badge b-open">Open</span></td><td>Written confirmation from each side</td></tr>
-        <tr><td class="id">P-02</td><td>Ask ADB for a written decision on Grant 0742-AFG: extend, restructure, close or ring-fence</td><td>ADB project 47282-007: 91% contracted, $0 disbursed, status “Active” after the original closing date</td><td class="tbc">Proposed: Uzbekistan, as an ADB member (authority to be confirmed)</td><td>Month 1</td><td><span class="badge b-open">Open</span></td><td>Letter sent; ADB reply logged</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="legend">
-    <div><span class="badge b-open">Open</span><br>Registered, with a source, a proposed owner and a deadline.</div>
-    <div><span class="badge b-prog">In progress</span><br>A decision is recorded and being carried out.</div>
-    <div><span class="badge b-esc">Escalated</span><br>Moved up a level because its time at the current level ran out.</div>
-    <div><span class="badge b-res">Resolved</span><br>Closed only with evidence: a decision, an approved document or a signed protocol.</div>
-  </div>
-</section>
-
-<section aria-labelledby="ex-h">
-  <p class="eyebrow">Worked example · R-02</p>
-  <h2 id="ex-h">One issue through all six steps</h2>
-  <div class="steps" id="steps"></div>
-</section>
-
-<section aria-labelledby="page-h">
-  <p class="eyebrow">One page</p>
-  <h2 id="page-h">The joint monthly status note, drafted from the register</h2>
-  <div class="paper" id="note"></div>
-  <p class="rule">Data rule: every figure carries its date, unit, indicator and source. The note is internal by default; a public summary appears only with both sides’ consent (Art. 10). It is issued by the 5th working day of each month and builds on Uzbekistan’s weekly progress reports.</p>
-</section>
-
-<section aria-labelledby="rules-h">
-  <p class="eyebrow">Pilot rules and targets</p>
-  <h2 id="rules-h">What the pilot tests in 90 days</h2>
-  <div class="two">
-    <div class="card"><h3>Rules</h3><ul>
-      <li>Every issue enters the register with a source, a proposed owner and a deadline in working days from registration.</li>
-      <li>The clock moves an open issue up one level after 7, 14 and 30 working days. These are pilot parameters, reviewed after three months.</li>
-      <li>An issue closes only with evidence.</li>
-      <li>The register and the note stay between the parties (Art. 10).</li>
-      <li>Supply volumes and tariffs stay in commercial contracts (Art. 9).</li>
-      <li>Financing and the ADB grant go to a separate track, where partners decide.</li>
-    </ul></div>
-    <div class="card"><h3>Targets during the pilot (to be tested)</h3><ul>
-      <li>100% of registered issues have an owner and a deadline.</li>
-      <li>80% of issues have a documented decision within 30 working days. This is a pilot objective, not a guaranteed result.</li>
-      <li>3 of 3 monthly notes are issued by the 5th working day.</li>
-      <li>Median working days from registration to decision are measured monthly and should fall.</li>
-    </ul></div>
-  </div>
-</section>
-
-<footer>
-  <p><strong>Sources.</strong>
-  <a href="https://pajhwok.com/2026/10/14/afghan-uzbek-officials-agree-to-accelerate-surkhan-pul-i-khumri-power-project/">Pajhwok, 14 October 2026</a>: the issues named at the talks ·
-  <a href="https://lex.uz/ru/docs/3591669">Agreement of 5 December 2017, official text (Lex.uz)</a>: Arts. 2, 3, 9, 10, 12 ·
-  <a href="https://www.adb.org/projects/47282-007/main">ADB project 47282-007, Grant 0742-AFG</a>.</p>
-  <p>Student project “Diplomatic Mechanisms for Developing Electricity Trade between Central Asia and Afghanistan”, expert committee defense, November 2026 (Birlink programme, Narxoz University). This is a training prototype built from public sources. It is not a document of either side or of ADB, and the statuses on pilot days are simulated.</p>
-</footer>
-</div>
-
+<body data-p="project">
+<nav class="top"><div class="in"><span class="logo"><i>⚡</i><span id="logoT"></span></span><div class="pages" id="pages"></div><div class="tog"><button id="lEN" aria-pressed="true">EN</button><button id="lRU" aria-pressed="false">RU</button><button id="thB" aria-label="Dark mode">☾</button></div></div></nav>
+<main id="main"></main>
+<div class="wrap"><div class="nextp" id="nextp"></div></div>
+<footer><div class="wrap" id="foot"></div></footer>
 <script>
-(function(){
-  var ISSUES=[
-    {id:'R-01',name:'Project financing and payments',deadline:15,next:'Agree the payment schedule',evidence:'Signed payment schedule'},
-    {id:'R-02',name:'Substation equipment manufacturers',deadline:15,next:'Shortlist the makers',evidence:'Approved list of manufacturers',example:true},
-    {id:'R-03',name:'Technical designs and documents',deadline:30,next:'Set a delivery date',evidence:'Approved drawings and documents'},
-    {id:'R-04',name:'Document discrepancies',deadline:20,next:'Joint review',evidence:'Signed joint protocol'},
-    {id:'R-05',name:'Restart of construction',deadline:30,next:'Set the restart date',evidence:'Joint decision with a restart date'}
-  ];
-  var SRC='https://pajhwok.com/2026/10/14/afghan-uzbek-officials-agree-to-accelerate-surkhan-pul-i-khumri-power-project/';
-  var LEVELS=[
-    {d:'Days 1–7',w:'Level 1',o:'Company contacts solve it directly',min:1,max:7},
-    {d:'Days 8–14',w:'Level 2',o:'Joint working group (Art. 3)',min:8,max:14},
-    {d:'Days 15–30',w:'Level 3',o:'A higher level agreed by both sides',min:15,max:30},
-    {d:'After day 30',w:'Beyond',o:'Agenda of the next high-level bilateral meeting',min:31,max:99}
-  ];
-  var STEPS=[
-    {when:'14 Oct 2026',day:0,name:'1. Identified',what:'Named at the talks (Pajhwok). This step is real.'},
-    {when:'Day 1',day:1,name:'2. Registered',what:'Entered with its source and a deadline of 15 working days.'},
-    {when:'Day 1',day:1,name:'3. Owner assigned',what:'Owner proposed; both sides confirm it.'},
-    {when:'Day 8',day:8,name:'4. Escalated',what:'Still open after 7 working days, so it goes to the joint working group.'},
-    {when:'Day 12',day:12,name:'5. Decision recorded',what:'The group approves a shortlist; the decision is attached to the register.'},
-    {when:'Day 15',day:15,name:'6. Implementation verified',what:'The owner confirms the approved list; the issue closes with evidence.'}
-  ];
-  var daySel=document.getElementById('day');
-  function levelIndex(d){for(var i=0;i<LEVELS.length;i++){if(d>=LEVELS[i].min&&d<=LEVELS[i].max)return i}return 3}
-  function stateOf(issue,d){
-    var li=levelIndex(d), lv=LEVELS[li];
-    if(issue.example){
-      if(d>=15) return {level:'Closed on day 15',status:'Resolved',cls:'b-res',next:'None: closed with evidence',late:false};
-      if(d>=12) return {level:'Level 2 · Joint working group',status:'In progress',cls:'b-prog',next:'Decision recorded; owner verifies the approved list',late:false};
-    }
-    var late=d>issue.deadline;
-    var levelTxt=lv.w+' · '+(li===3?'Next high-level meeting':(li===2?'Agreed higher level':lv.o.split(' (')[0]));
-    if(li===0) return {level:levelTxt,status:'Open',cls:'b-open',next:issue.next,late:late};
-    var nxt = li===1?'Referred to the joint working group (Art. 3)':(li===2?'Referred to the agreed higher level':'On the agenda of the next high-level bilateral meeting');
-    return {level:levelTxt,status:'Escalated',cls:'b-esc',next:nxt,late:late};
-  }
-  function esc(t){return String(t).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
-  function render(d){
-    document.getElementById('dayval').textContent=(d>30?'After day 30':'Day '+d);
-    document.getElementById('regday').textContent=(d>30?'pilot day 31 (after day 30)':'pilot day '+d);
-    var bs=document.querySelectorAll('button.day');
-    for(var i=0;i<bs.length;i++){bs[i].setAttribute('aria-pressed',String(Number(bs[i].dataset.day)===d))}
-    // levels
-    var li=levelIndex(d), lh='';
-    LEVELS.forEach(function(l,i){lh+='<div class="lv'+(i===li?' on':'')+'"><div class="d">'+l.d+'</div><div class="w">'+l.w+'</div><div class="o">'+l.o+'</div></div>'});
-    document.getElementById('levels').innerHTML=lh;
-    // rows + counters
-    var c={open:0,prog:0,esc:0,res:0,late:0}, rows='', states=[];
-    ISSUES.forEach(function(it){
-      var s=stateOf(it,d); states.push(s);
-      if(s.status==='Open')c.open++; if(s.status==='In progress')c.prog++; if(s.status==='Escalated')c.esc++; if(s.status==='Resolved')c.res++;
-      if(s.late&&s.status!=='Resolved')c.late++;
-      rows+='<tr'+(it.example?' class="ex"':'')+'><td class="id">'+it.id+'</td><td>'+esc(it.name)+(it.example?'<span class="tag">worked example</span>':'')+'</td>'+
-        '<td><a href="'+SRC+'" aria-label="Source: Pajhwok, 14 October 2026">Pajhwok</a></td><td class="tbc">To be confirmed</td>'+
-        '<td>Day '+it.deadline+(s.late&&s.status!=='Resolved'?' <span class="late">· past</span>':'')+'</td>'+
-        '<td>'+esc(s.level)+'</td><td><span class="badge '+s.cls+'">'+s.status+'</span></td><td>'+esc(s.next)+'</td><td>'+esc(it.evidence)+'</td></tr>';
-    });
-    document.getElementById('rows').innerHTML=rows;
-    document.getElementById('counters').innerHTML=
-      '<div class="ct c-open"><b>'+c.open+'</b><span>Open</span></div><div class="ct c-prog"><b>'+c.prog+'</b><span>In progress</span></div>'+
-      '<div class="ct c-esc"><b>'+c.esc+'</b><span>Escalated</span></div><div class="ct c-res"><b>'+c.res+'</b><span>Resolved</span></div>'+
-      '<div class="ct c-late"><b>'+c.late+'</b><span>Past deadline</span></div>';
-    // steps
-    var sh='', nextMarked=false;
-    STEPS.forEach(function(st){
-      var done=d>=st.day, cls=done?'done':(!nextMarked?'next':'');
-      if(!done&&!nextMarked)nextMarked=true;
-      sh+='<div class="st '+cls+'"><div class="when">'+st.when+'</div><div class="name">'+st.name+'</div><div class="what">'+st.what+'</div></div>';
-    });
-    document.getElementById('steps').innerHTML=sh;
-    // note
-    var open=[], decisions='', progress='', plan='';
-    ISSUES.forEach(function(it,i){ if(states[i].status!=='Resolved') open.push('<li>'+it.id+' '+esc(it.name)+': '+states[i].status.toLowerCase()+', '+esc(states[i].level)+(states[i].late?' (past deadline)':'')+'</li>'); });
-    var r2=states[1];
-    progress = r2.status==='Resolved' ? 'R-02 Substation equipment manufacturers: closed with evidence (approved list).' : 'None yet. Registered issues are being worked through the clock.';
-    decisions = d>=12 ? 'R-02: the joint working group approved a shortlist of substation equipment manufacturers (day 12). Owner to be confirmed.' : 'No decisions recorded yet.';
-    var planItems=[]; ISSUES.forEach(function(it,i){ if(states[i].status!=='Resolved') planItems.push('<li>'+it.id+': '+esc(states[i].next)+'</li>'); });
-    plan = planItems.length?'<ul>'+planItems.join('')+'</ul>':'All registered issues are resolved.';
-    document.getElementById('note').innerHTML=
-      '<div class="ph"><span>Joint status note · draft</span><span>Pilot day '+(d>30?'31':d)+' · illustrative</span></div><dl>'+
-      '<dt>Reporting period</dt><dd>Month 1 of the pilot (illustrative)</dd>'+
-      '<dt>Confirmed progress</dt><dd>'+progress+'</dd>'+
-      '<dt>Open and overdue issues</dt><dd>'+(open.length?(open.length+' open, of which '+c.late+' past deadline<ul>'+open.join('')+'</ul>'):'None')+'</dd>'+
-      '<dt>Decisions and responsible parties</dt><dd>'+decisions+'</dd>'+
-      '<dt>Next steps</dt><dd>'+plan+'</dd>'+
-      '<dt>Agreed figures</dt><dd>MWh delivered, $ billed and % complete, each agreed by both sides before it is reported.</dd>'+
-      '<dt>Winter supply outlook</dt><dd>Added to the October note each year.</dd></dl>';
-  }
-  var days=[1,8,12,15,20,31], bh='';
-  days.forEach(function(x){bh+='<button type="button" class="day" data-day="'+x+'" aria-pressed="false">'+(x===31?'After day 30':'Day '+x)+'</button>'});
-  document.getElementById('btns').innerHTML=bh;
-  document.getElementById('btns').addEventListener('click',function(e){
-    var b=e.target.closest('button.day'); if(!b)return;
-    daySel.value=b.dataset.day; render(Number(b.dataset.day));
-  });
-  daySel.addEventListener('input',function(){render(Number(daySel.value))});
-  render(1);
-})();
+{
+/* ======================= TEXT ======================= */
+const T={
+en:{logo:"Electricity for Afghanistan",nav:["Our project","Uzbekistan","Tajikistan","Turkmenistan","Does it work?"],
+ next:["Next: the Uzbekistan line →","Next: the Tajikistan line →","Next: the Turkmenistan line →","Next: does it work? →","Back to the start ↺"],
+ foot:"Research paper: “Diplomatic Mechanisms for Developing Electricity Trade between Central Asia and Afghanistan” · Diyor, Alim Mohammad Afzal, Zarina · Numbers in [brackets] are sources in the paper.",
+ st:{ok:"Confirmed",part:"Conditional",nd:"Insufficient data",no:"Not ready"},
+ stD:{ok:"A paper proves it.",part:"The base exists, but one thing is missing.",nd:"No paper found yet. This is not a “no”.",no:"A paper shows it is not ready."},
+ Q:["Is there extra electricity to sell?","Is the power line ready?","Is there a contract?","Is payment safe?","Is someone following the problems?"],
+ QS:["Extra power?","Line ready?","Contract?","Payment safe?","Problems followed?"],
+ stage:{sent:"Sent",rem:"Reminder",wg:"Working group",min:"Ministers",done:"Answered"},
+ /* page 1 */
+ p1:{kick:"Student research · BirliNk C5+ · Narxoz University",h1:"Reliable electricity for Afghanistan — <em>a Central Asian solution</em>",lead:"Afghanistan buys most of its electricity from Central Asia. We found why this trade is hard to plan — and we built a simple tool that fixes it, using only groups that already exist.",by:"Diyor · Alim Mohammad Afzal · Zarina",cta:["See the solution","Try it on a power line"],
+  sum:[["The problem","The facts about each power line are scattered, and nobody follows the problems until they are solved."],["Our solution","One card with 5 questions for each line. Every missing answer becomes a dated question. No reply? It goes higher."],["Why it can work","It uses groups that already exist. No new organisation, no new money at the start, no political recognition needed."]],
+  pH:"The problem",pI:"Four facts explain why this matters.",
+  s:[["Afghanistan needs power","8 in 10","people","do not have reliable electricity day and night.","UNDP, Nov 2026 [10]"],["It depends on imports","80%","of its electricity is imported","More than 90% of these imports come from Central Asia.","UNDP, Jun 2026 [25]"],["Sellers need it too","78%","of Uzbekistan’s electricity export money","came from Afghanistan in 2024.","[30]"],["Winter is the weak point","90%+","of Tajikistan’s power exports","happen in April–September. Winter supply is not clear.","[8]"]],
+  barL:["Imported","Own production"],yrL:["Jan","Dec"],
+  mH:"Meetings already exist",mI:"The countries already have many agreements and meetings. So the problem is <b>not</b> a lack of meetings — and we do <b>not</b> need a new organisation.",
+  chips:["2017 Uzbekistan–Afghanistan agreement + working group","Meeting of Central Asian presidents","Special envoys for Afghanistan (since 2025)","CAREC / Asian Development Bank","CASA-1000 project","Energy and water ministers"],
+  rH:"The real problem: the facts are scattered and do not match",rI:"Important facts sit in different news reports, websites and bank papers. Some disagree. Nobody keeps them in one place. Four real examples:",
+  cl:[["Finish date of the new Surkhan line","Aug 2025: “ready in the first quarter of 2027”","Jun 2026: “ready in August 2027”","Nobody tracks the change in one place"],["ADB grant ($110 million)","91% of the money is in signed contracts","$0 paid out (Aug 2026)","Link to the new Uzbek money is not clear"],["Tajik exports to Afghanistan, 2025","Ministry: 1,760.3 GWh","Power company: 1,755.2 GWh","No note explains the difference"],["Big blackout, 14 August 2026","Kazakhstan: one explanation","Kyrgyzstan: another explanation","The cause is still disputed"]],
+  rN:"Result: simple questions — <b>When will the new line work? How much power will there be in winter? Is payment safe? Who must fix each problem?</b> — have no single clear answer.",rS:"Paper, Section 4.2 [43, 44, 45, 8, 9, 28, 29]",
+  gH:"One more difficulty: recognition",gP:"Almost no country has officially recognised Afghanistan’s current government (Russia was the first, and by August 2026 the only one). But Central Asian officials still work with Afghan technical partners, like the power company <b>DABS</b>. So a new treaty is hard — but a <b>small technical tool</b> is possible.",gS:"[52–54]",
+  rqL:"OUR RESEARCH QUESTION",rq:"How can Central Asian countries make electricity trade with Afghanistan more reliable — without a new organisation, and without waiting for recognition?",
+  solH:"Our solution: one simple tool in 4 parts",solI:"The tool is used by groups that <b>already exist</b>. It builds nothing new. It makes sure the important facts are in one place, and that no problem is forgotten.",
+  parts:[["PART 1","The card","Each power line gets one card with <b>5 questions</b>. Each answer gets a colour, based on documents only.","Uzbekistan line, question B “Is the line ready?” → <b style=\"color:#dc2626\">red</b>: it is still being built."],["PART 2","The list","Every answer that is <b>not green</b> becomes a question to the <b>office that knows</b>. Each question gets a date.","“When will the line be ready?” → sent to the Ministry of Energy of Uzbekistan on day 0."],["PART 3","The clock","No reply? The question <b>moves up</b>: after 7 working days a reminder, after 14 the working group, after 30 the ministers.","No reply in 30 days → the question is on the energy ministers’ table."],["PART 4","One page","Leaders get <b>one short page</b>: what is confirmed, what is missing, what is stuck.","“Line being built, finish confirmed for Aug 2027. Open with ministers: winter power.”"]],
+  exL:"Example:",
+  cyc:["1 · Not green","2 · Question","3 · Reply","4 · Card changes","THE ONE RULE","No reply? The question","moves up until it gets one."],
+  cycH:"The one rule that connects everything",cycP:["An answer on the card is not green.","It becomes a question to the office that knows.","The office replies. If not, the question moves up: reminder → working group → ministers.","The card is checked again with the new fact. Then the circle starts again."],cycS:"7, 14 and 30 days are example numbers. The real ones are agreed later. Paper, Sections 6 and 6.2.",
+  colH:"The 4 colours",whyH:"Why these 5 questions?",whyP:"They follow the path of electricity: <b>power → line → contract → payment → follow-up</b>. Electricity can be sold across a border only if all five work at the same time. If one fails, trade stops.",
+  whoH:"Who does what?",whoI:"Four levels. All of them already exist. A question starts at the bottom and moves up only if there is no reply.",
+  lv:[["L1","Presidents","Meeting of Central Asian presidents — get one page a year."],["L2","Ministers and special envoys","Look at questions with no reply. Check winter and summer power."],["L3","Working group","For example the Uzbek–Afghan group from 2017 — keeps the card and the list, writes the one page."],["L4","Power companies","DABS and Central Asian power companies — give the numbers."]],whoS:"Paper, Section 6.3",
+  goH:"Try the tool on each power line",go:[["Uzbekistan line →","A line being built. Follow all questions to the reply."],["Tajikistan line →","Summer and winter. Two numbers for one fact."],["Turkmenistan line →","Very little data. One problem stays on one card."]]},
+ /* line pages shared */
+ lp:{modelH:"The line and its card",modelI:"Each letter in the 3D model is one question of the card. <b>Click a question</b> to see it in the model.",drag:"Drag to turn",cardHd:"Card",click:"click a question",
+  toolH:"Try the tool yourself",toolI:"<b>1.</b> Send the questions. <b>2.</b> Move time forward. <b>3.</b> Give replies. Watch where each question goes and how the card changes.",
+  send:"① Send questions",d1:"+1 day",d7:"+7 days",play:"▶ Play",pause:"❚❚ Pause",closeL:"Close",unch:"no change",aftL:"Now · day",reset:"↺ Reset",dayL:"Working day",start:"Press “Send questions” to start. Every answer that is not green becomes a question.",
+  th:["Question","Where is it now?","Reply"],notSent:"Not sent yet",asked:"Asked:",rep:["Confirmed","Conditional","Not ready"],eNote:"E needs no question: once the list exists, E becomes “Conditional”.",
+  marks:[[7,"reminder"],[14,"working group"],[30,"ministers"]],jT:"Where is each question now?",
+  baH:"Before and after",baI:"The same card at the start and now. Changed answers are highlighted.",bef:"At the start",now:"Now · working day",
+  pgH:"One page for the leaders",pgI:"Made automatically from the card and the list.",pgT:"ONE PAGE",res:"Result",
+  pgF:["Confirmed","Conditional","Data requested","Not ready","Waiting at the ministers"],waiting:"questions waiting",answered:"answered",
+  ov:{ok:"Enough proof to consider (not a guarantee)",nd:"Cannot judge yet: some data is missing",x:"Possible, but some things are missing"},
+  chH:"What changes for this line?",today:"Today",withT:"With our tool",
+  auto:["Example reply (simulation): monthly figures shared for part of the year.","Example reply (simulation): schedule restated; still no commissioning record.","Example reply (simulation): draft terms shared; not yet signed.","Example reply (simulation): bank route described; compliance check still open."],autoN:"After the ministers step in, example replies arrive (simulation).",
+  notes:{ok:"Official document received: confirmed.",part:"Reply received: one condition is still open.",no:"Official reply: not in place yet.",list:"The question list has started."}},
+ lines:{
+  surx:{kick:"Case 1 · Uzbekistan → Afghanistan",h1:"Surkhan → <em>Pul-e-Khumri</em>",lead:"A new 500 kV line from Uzbekistan to Afghanistan. Run our tool on it yourself — and see how every gap turns into a question that cannot be forgotten.",
+   facts:[["500 kV","new line, about 245 km [24]"],["Up to 6 bn kWh","a year in the 2019 supply contract [46]"],["Q1 2027 → Aug 2027","finish date moved [43, 44]"],["78%","of Uzbek electricity export money comes from Afghanistan [30]"]],
+   notes:["No public numbers for winter","Still being built. Published projection: August 2027, not confirmed","Contract from 2019. Terms for new power are not public","Payments come on time now. New deals need bank checks","Nobody keeps a list of problems"],
+   qs:[["How much power can you send each winter month?","Uzbek power grid company"],["When will the line be ready, and has the ADB grant been paid?","Ministry of Energy · ADB and DABS"],["What are the new terms: how much power, what price, how long?","Ministry of Energy and DABS"],["How will the money be paid safely?","Banks of both countries"]],
+   special:{1:{no:"Official reply: still being built; August 2027 restated as a projection."}},
+   today:"The new finish date is only in separate news reports. Nobody has formally asked about winter power.",withT:"Both become dated questions to a named office. If there is no reply, they go up to the ministers.",src:"Statuses: paper, Section 7.1. Questions: Section 6.5."},
+  tj:{kick:"Case 2 · Tajikistan → Afghanistan",h1:"A <em>summer</em> seller",lead:"Tajikistan makes most of its power from water. In summer it has a lot to sell; in winter it needs power itself. Run the tool and see how it handles seasons and numbers that do not match.",
+   facts:[["1,760.3 mln kWh","sold to Afghanistan in 2025 (Ministry) [8]"],["90%+","of exports happen in April–September [8]"],["2,688 mln kWh","bought from Uzbekistan in 2025 [8]"],["2 numbers","for the same fact: Ministry vs power company [8, 9]"]],
+   notes:["Sells mostly in summer. No monthly numbers","Power flowed in 2025. Line limits not checked","Trade exists. Contract details not checked","Payment terms are not public","No list of problems"],
+   qs:[["How much power can you sell each month — and why do the two 2025 numbers differ?","Barqi Tojik and the Ministry of Energy"],["How much power can the line carry safely?","Barqi Tojik and DABS"],["What does the current contract say?","Ministry of Energy of Tajikistan and DABS"],["How is payment made?","Banks of both countries"]],special:{},
+   today:"Only yearly numbers. Nobody can see how much power is really free in winter.",withT:"The card asks for monthly numbers before each winter and summer. The ministers see the answer — or the missing answer.",src:"Card colours: our reading of Section 7.2 with the rules in Section 6.1."},
+  tap:{kick:"Case 3 · Turkmenistan → Afghanistan (TAP)",h1:"A line with <em>very little data</em>",lead:"Turkmenistan sells power to north and west Afghanistan but publishes almost no numbers. Its big new line, TAP, is still mostly a plan. Run the tool and see why grey is not red.",
+   facts:[["None","official export volumes published [3.5]"],["Jan 2025","agreement to make a roadmap for TAP-500 [50]"],["Sep 2026","talks on a 500 kV line and Nur-ul-Jihad substation [49, 51]"],["No date","no finish date announced"]],
+   notes:["No public numbers","No finish date. Not built yet","A plan and talks exist. No contract seen","Payment terms are not public","No list of problems"],
+   qs:[["How much power do you sell to Afghanistan?","Ministry of Energy of Turkmenistan"],["When will the line be ready?","Turkmen side and DABS"],["Is there a signed contract?","Turkmen side and DABS"],["How is payment made?","Banks of both countries"]],special:{},
+   today:"Almost no public numbers. It is easy to guess — or to blame.",withT:"Every unknown becomes a polite, dated question. The card stays fair: grey until a document arrives.",src:"Statuses: paper, Section 3.5."}},
+ tj:{sH:"Summer and winter",sI:"Switch the season. The model, the river and the power flow change.",sum:"☀ Summer (Apr–Sep)",win:"❄ Winter (Oct–Mar)",sumP:"Rivers are full. The hydro plant makes a lot of power. Most exports to Afghanistan happen now.",winP:"Less water. Tajikistan needs the power itself and buys from Uzbekistan. How much is left for Afghanistan? No monthly numbers are published — so A stays grey.",
+  nH:"Two numbers, one fact",nI:"The Ministry and the power company Barqi Tojik give two different numbers for 2025 exports to Afghanistan. Our rule: <b>keep both, write who said each one, do not take the average — and ask.</b>",min:"Ministry",co:"Barqi Tojik",diff:"Difference: 5.1 GWh. No public note explains it.",nS:"Paper, Section 7.2: “label each source by reporting entity and not average the two values.” This question is part of question A in the tool above."},
+ tm:{gH:"Little data is grey, not red",gI:"If a country publishes little, it is easy to say “it failed”. Our tool does not do that.",wrong:"✗ Wrong way",wrongP:"No numbers found → <b>Not ready</b>. “Turkmenistan failed.” This blames a country without proof.",right:"✓ Our way",rightP:"No numbers found → <b>Insufficient data</b>. A polite question goes to the Ministry of Energy of Turkmenistan. The card stays fair.",gS:"Paper, Section 6.1: “insufficient data” does not mean the criterion fails.",
+  oH:"One problem stays on one card",oI:"TAP should go on to Pakistan. In early 2026, Afghanistan–Pakistan relations turned into border fighting. Does that stop work on the other lines? Press the button.",hit:"Add a problem on the Pakistan route",undo:"Reset",chg:"⚑ Written here: problem on the Pakistan route",noChg:"No change. Work goes on.",msg0:"Each line has its own card. A problem is written only on the card of the line it affects.",msg1:"<b>Only the TAP card changed.</b> The Uzbekistan and Tajikistan lines keep working.",oS:"Paper, Section 9 [56, 11]",names:["Uzbekistan line","Tajikistan line","Turkmenistan line (TAP)"],
+  whyN:"Why it matters most here: Turkmenistan is not part of the regional systems that share power data (CAPS, REMIT). A simple shared card can work where other systems do not reach."},
+ test:{kick:"Does it work?",h1:"Let the computer <em>test the rules</em>",lead:"We wrote the rules of our tool as a small program. Each test gives it a situation and checks the result by itself. Press the button and watch.",run:"▶ Run all 6 tests",of:"of",passed:"checks passed",works:"✓ Works",failed:"✗ Failed",
+  T:[["Nobody replies","Can a question get lost?",["Day 7: a reminder was sent","Day 14: the working group has it","Day 30: the ministers have it","No question was lost"]],["A reply comes","Does the card change?",["The question is closed","The card shows the new fact","The line stays “Not ready”","This question did not go to ministers","The change is saved in the history"]],["Two numbers disagree","What if two sources say different things?",["It is marked “unclear”","Both numbers are kept","A question is sent","It cannot be green while unclear","Only the official reply removes the mark"]],["No data is not a “no”","Is a country punished for having no data?",["It stays grey, not red","A question asks for the data","The summary lists it as “data requested”","It does not say “failed”"]],["Everything is confirmed","Does it make extra work?",["No questions are made","Summary: “enough proof to consider”","It also says “not a guarantee”"]],["Problem on one line","Does it stop the other lines?",["It is shown on the Turkmenistan card","Uzbekistan line did not change","Tajikistan line did not change"]]],
+  showH:"What the tests show — and what they don’t",yes:"✓ They show",yesL:["No question gets lost.","A reply really changes the card.","Facts that disagree stay visible until an official reply.","Little data is not treated as failure.","A problem on one line does not stop the others."],notY:"! They do not show yet",notL:["That real offices will reply faster.","That electricity will arrive more reliably."],notP:"For that, a real test with real offices is needed (a pilot).",
+  realH:"How a real test would work",real:[["Same papers, two people","Two reviewers get the same pack of public documents. They do not talk to each other."],["Old way vs card","Each one checks the line the usual way and with the card."],["Measure","Do they give the same colours? How long does it take? What did they miss?"],["Report everything","Also bad results. Experts in power grids and in contracts check the tool."]],realS:"Paper, Section 10.2",
+  howH:"How to start: 6 steps",how:[["Start with one line","The Uzbekistan line. Use the working group made in 2017. No new office, no new money.","Who: the Uzbek–Afghan working group"],["Uzbekistan suggests it","It cares most (78% of its electricity export money). It sends the card to the working group for comments.","Who: Uzbekistan"],["Fill the first card","Read official papers. Give each answer a colour, a date and a source. A second person checks.","Who: the working group, with numbers from power companies"],["Start the list and the clock","Every missing answer becomes a question with a date. The real number of days is agreed in the test.","Who: the working group"],["Send one page up","Twice a year to ministers and special envoys. Once a year to the presidents’ meeting.","Who: the working group writes it"],["Check, then grow — or stop","If it helps, add the Tajikistan and Turkmenistan lines. If not, stop.","Who: the governments decide"]],howS:"Paper, Sections 6.4, 9.1 and policy recommendations"},
+ g3:{UZ:"Uzbekistan",TJ:"Tajikistan",TM:"Turkmenistan",AF:"Afghanistan",KZ:"Kazakhstan",KG:"Kyrgyzstan",PK:"Pakistan",imp:"About 80% imported",bank:"Bank",contract:"Contract",wg:"Working group",uc:"Under construction",river:"Amu Darya river (border)",border:"Border",pak:"Pakistan (future)",
+  surx:{plant:"Power plants of Uzbekistan",left:"Surkhan substation",right:"Pul-e-Khumri substation",city:"Kabul"},tj:{plant:"Sangtuda hydro power plant",left:"Tajik substation",right:"Kunduz / Pul-e-Khumri",city:"Kunduz"},tap:{plant:"Mary power plant",left:"Turkmen substation",right:"Herat (Nur-ul-Jihad substation)",city:"Herat"},
+  jWG:"L3 · Working group",jOF:"Offices that know",jMIN:"L2 · Ministers",jPRES:"L1 · Presidents",jCARD:"The card",rSend:"sent",ready:"ready to send",r14:"no reply 14 days",r30:"no reply 30 days",r1p:"1 page a year",q1:"question here",qN:"questions here",sOF:"Offices"}},
+ru:{logo:"Электроэнергия для Афганистана",nav:["Наш проект","Узбекистан","Таджикистан","Туркменистан","Это работает?"],
+ next:["Далее: линия Узбекистана →","Далее: линия Таджикистана →","Далее: линия Туркменистана →","Далее: это работает? →","В начало ↺"],
+ foot:"Исследование: «Дипломатические механизмы развития торговли электроэнергией между Центральной Азией и Афганистаном» · Диёр, Алим Мохаммад Афзал, Зарина · Числа в [скобках] — источники в работе.",
+ st:{ok:"Подтверждено",part:"Условно",nd:"Недостаточно данных",no:"Не готово"},
+ stD:{ok:"Есть документ, который это доказывает.",part:"Основа есть, но чего-то одного не хватает.",nd:"Документ пока не найден. Это не «нет».",no:"Документ показывает, что не готово."},
+ Q:["Есть ли лишняя электроэнергия на продажу?","Готова ли линия электропередачи?","Есть ли договор?","Безопасна ли оплата?","Кто-то следит за проблемами?"],
+ QS:["Лишняя энергия?","Линия готова?","Договор?","Оплата безопасна?","Проблемы отслеживаются?"],
+ stage:{sent:"Отправлен",rem:"Напоминание",wg:"Рабочая группа",min:"Министры",done:"Отвечен"},
+ p1:{kick:"Студенческое исследование · BirliNk C5+ · Университет Нархоз",h1:"Надёжная электроэнергия для Афганистана — <em>решение Центральной Азии</em>",lead:"Афганистан покупает бо́льшую часть электроэнергии у Центральной Азии. Мы выяснили, почему эту торговлю трудно планировать, и создали простой инструмент, который это исправляет — только с помощью уже существующих групп.",by:"Диёр · Алим Мохаммад Афзал · Зарина",cta:["Посмотреть решение","Попробовать на линии"],
+  sum:[["Проблема","Факты о каждой линии разбросаны, и никто не следит за проблемами до их решения."],["Наше решение","Одна карточка с 5 вопросами для каждой линии. Каждый недостающий ответ становится вопросом с датой. Нет ответа — вопрос идёт выше."],["Почему это может работать","Используются уже существующие группы. Без новой организации, без новых денег на старте, без политического признания."]],
+  pH:"Проблема",pI:"Четыре факта объясняют, почему это важно.",
+  s:[["Афганистану нужна энергия","8 из 10","людей","не имеют надёжного электричества днём и ночью.","ПРООН, ноябрь 2026 [10]"],["Он зависит от импорта","80%","электроэнергии импортируется","Более 90% этого импорта идёт из Центральной Азии.","ПРООН, июнь 2026 [25]"],["Продавцам это тоже нужно","78%","экспортной выручки Узбекистана за электроэнергию","в 2024 году пришлось на Афганистан.","[30]"],["Зима — слабое место","90%+","экспорта электроэнергии Таджикистана","приходится на апрель–сентябрь. Поставки зимой неясны.","[8]"]],
+  barL:["Импорт","Своё производство"],yrL:["Янв","Дек"],
+  mH:"Встречи уже существуют",mI:"У стран уже много соглашений и встреч. Значит, проблема <b>не</b> в нехватке встреч — и новая организация <b>не</b> нужна.",
+  chips:["Соглашение Узбекистана и Афганистана 2017 г. + рабочая группа","Встреча президентов Центральной Азии","Спецпредставители по Афганистану (с 2025 г.)","ЦАРЭС / Азиатский банк развития","Проект CASA-1000","Министры энергетики и водных ресурсов"],
+  rH:"Настоящая проблема: факты разбросаны и не совпадают",rI:"Важные факты находятся в разных новостях, на сайтах и в банковских документах. Некоторые противоречат друг другу. Никто не хранит их в одном месте. Четыре реальных примера:",
+  cl:[["Срок завершения новой линии Сурхан","Авг 2025: «готово в первом квартале 2027»","Июн 2026: «готово в августе 2027»","Никто не отслеживает изменение в одном месте"],["Грант АБР ($110 млн)","91% средств — в подписанных контрактах","Выплачено $0 (авг 2026)","Связь с новыми узбекскими деньгами неясна"],["Экспорт Таджикистана в Афганистан, 2025","Министерство: 1 760,3 ГВт·ч","Энергокомпания: 1 755,2 ГВт·ч","Нет пояснения разницы"],["Крупный блэкаут, 14 августа 2026","Казахстан: одно объяснение","Кыргызстан: другое объяснение","Причина до сих пор оспаривается"]],
+  rN:"Итог: простые вопросы — <b>Когда заработает новая линия? Сколько энергии будет зимой? Безопасна ли оплата? Кто должен решить каждую проблему?</b> — не имеют одного ясного ответа.",rS:"Работа, раздел 4.2 [43, 44, 45, 8, 9, 28, 29]",
+  gH:"Ещё одна трудность: признание",gP:"Почти ни одна страна официально не признала нынешнее правительство Афганистана (Россия стала первой и к августу 2026 года — единственной). Но чиновники Центральной Азии продолжают работать с афганскими техническими партнёрами, например с энергокомпанией <b>DABS</b>. Поэтому новый договор сложен — а <b>небольшой технический инструмент</b> возможен.",gS:"[52–54]",
+  rqL:"НАШ ИССЛЕДОВАТЕЛЬСКИЙ ВОПРОС",rq:"Как странам Центральной Азии сделать торговлю электроэнергией с Афганистаном надёжнее — без новой организации и не дожидаясь признания?",
+  solH:"Наше решение: один простой инструмент из 4 частей",solI:"Инструментом пользуются <b>уже существующие</b> группы. Ничего нового не строится. Он следит, чтобы важные факты были в одном месте и ни одна проблема не была забыта.",
+  parts:[["ЧАСТЬ 1","Карточка","У каждой линии одна карточка с <b>5 вопросами</b>. Каждый ответ получает цвет — только на основе документов.","Линия Узбекистана, вопрос B «Готова ли линия?» → <b style=\"color:#dc2626\">красный</b>: её ещё строят."],["ЧАСТЬ 2","Список","Каждый ответ, который <b>не зелёный</b>, становится вопросом в <b>ведомство, которое знает</b>. У каждого вопроса есть дата.","«Когда будет готова линия?» → отправлен в Минэнерго Узбекистана в день 0."],["ЧАСТЬ 3","Часы","Нет ответа? Вопрос <b>идёт выше</b>: через 7 рабочих дней — напоминание, через 14 — рабочая группа, через 30 — министры.","Нет ответа 30 дней → вопрос на столе министров энергетики."],["ЧАСТЬ 4","Одна страница","Руководители получают <b>одну короткую страницу</b>: что подтверждено, чего не хватает, что застряло.","«Линия строится, завершение подтверждено на авг 2027. У министров: зимние поставки.»"]],
+  exL:"Пример:",
+  cyc:["1 · Не зелёный","2 · Вопрос","3 · Ответ","4 · Карточка меняется","ОДНО ПРАВИЛО","Нет ответа? Вопрос","идёт выше, пока не ответят."],
+  cycH:"Одно правило, которое всё связывает",cycP:["Ответ в карточке не зелёный.","Он становится вопросом в ведомство, которое знает.","Ведомство отвечает. Если нет — вопрос идёт выше: напоминание → рабочая группа → министры.","Карточку проверяют снова с новым фактом. Круг начинается заново."],cycS:"7, 14 и 30 дней — примерные числа. Реальные согласуются позже. Работа, разделы 6 и 6.2.",
+  colH:"4 цвета",whyH:"Почему именно эти 5 вопросов?",whyP:"Они повторяют путь электроэнергии: <b>энергия → линия → договор → оплата → контроль</b>. Продать электроэнергию через границу можно, только если все пять работают одновременно. Если одно не работает — торговля останавливается.",
+  whoH:"Кто что делает?",whoI:"Четыре уровня. Все они уже существуют. Вопрос начинается внизу и идёт вверх, только если нет ответа.",
+  lv:[["L1","Президенты","Встреча президентов Центральной Азии — одна страница в год."],["L2","Министры и спецпредставители","Рассматривают вопросы без ответа. Проверяют зимние и летние поставки."],["L3","Рабочая группа","Например, узбекско-афганская группа 2017 года — ведёт карточку и список, пишет одну страницу."],["L4","Энергокомпании","DABS и энергокомпании Центральной Азии — дают цифры."]],whoS:"Работа, раздел 6.3",
+  goH:"Попробуйте инструмент на каждой линии",go:[["Линия Узбекистана →","Линия строится. Проследите все вопросы до ответа."],["Линия Таджикистана →","Лето и зима. Две цифры для одного факта."],["Линия Туркменистана →","Очень мало данных. Одна проблема — на одной карточке."]]},
+ lp:{modelH:"Линия и её карточка",modelI:"Каждая буква в 3D-модели — один вопрос карточки. <b>Нажмите на вопрос</b>, чтобы увидеть его на модели.",drag:"Потяните, чтобы повернуть",cardHd:"Карточка",click:"нажмите на вопрос",
+  toolH:"Попробуйте инструмент сами",toolI:"<b>1.</b> Отправьте вопросы. <b>2.</b> Двигайте время. <b>3.</b> Дайте ответы. Смотрите, куда идёт каждый вопрос и как меняется карточка.",
+  send:"① Отправить вопросы",d1:"+1 день",d7:"+7 дней",play:"▶ Пуск",pause:"❚❚ Пауза",closeL:"Закрыть",unch:"без изменений",aftL:"Сейчас · день",reset:"↺ Сброс",dayL:"Рабочий день",start:"Нажмите «Отправить вопросы». Каждый не зелёный ответ станет вопросом.",
+  th:["Вопрос","Где он сейчас?","Ответ"],notSent:"Ещё не отправлен",asked:"Кому:",rep:["Подтверждено","Условно","Не готово"],eNote:"Для E вопрос не нужен: как только список появляется, E становится «Условно».",
+  marks:[[7,"напоминание"],[14,"рабочая группа"],[30,"министры"]],jT:"Где сейчас каждый вопрос?",
+  baH:"До и после",baI:"Одна и та же карточка в начале и сейчас. Изменённые ответы выделены.",bef:"В начале",now:"Сейчас · рабочий день",
+  pgH:"Одна страница для руководителей",pgI:"Создаётся автоматически из карточки и списка.",pgT:"ОДНА СТРАНИЦА",res:"Итог",
+  pgF:["Подтверждено","Условно","Запрошены данные","Не готово","Ждут у министров"],waiting:"вопросов ждут",answered:"отвечено",
+  ov:{ok:"Достаточно доказательств для рассмотрения (не гарантия)",nd:"Пока нельзя судить: не хватает данных",x:"Возможно, но кое-чего не хватает"},
+  chH:"Что меняется для этой линии?",today:"Сегодня",withT:"С нашим инструментом",
+  auto:["Пример ответа (симуляция): помесячные данные переданы за часть года.","Пример ответа (симуляция): срок повторён; акта ввода в эксплуатацию пока нет.","Пример ответа (симуляция): переданы проекты условий; ещё не подписаны.","Пример ответа (симуляция): банковский маршрут описан; проверка соответствия ещё идёт."],autoN:"После подключения министров приходят примерные ответы (симуляция).",
+  notes:{ok:"Получен официальный документ: подтверждено.",part:"Ответ получен: одно условие ещё открыто.",no:"Официальный ответ: пока не готово.",list:"Список вопросов начат."}},
+ lines:{
+  surx:{kick:"Кейс 1 · Узбекистан → Афганистан",h1:"Сурхан → <em>Пули-Хумри</em>",lead:"Новая линия 500 кВ из Узбекистана в Афганистан. Запустите наш инструмент сами — и посмотрите, как каждый пробел становится вопросом, который нельзя забыть.",
+   facts:[["500 кВ","новая линия, около 245 км [24]"],["До 6 млрд кВт·ч","в год по договору 2019 года [46]"],["I кв. 2027 → авг 2027","срок завершения сдвинулся [43, 44]"],["78%","экспортной выручки Узбекистана за электроэнергию — из Афганистана [30]"]],
+   notes:["Нет открытых данных по зиме","Ещё строится. Опубликованный прогноз: август 2027, не подтверждён","Договор 2019 года. Условия для новых объёмов не опубликованы","Сейчас оплата вовремя. Новым сделкам нужна проверка банков","Никто не ведёт список проблем"],
+   qs:[["Сколько энергии вы можете поставлять в каждый зимний месяц?","Узбекская сетевая компания"],["Когда будет готова линия и выплачен ли грант АБР?","Минэнерго · АБР и DABS"],["Каковы новые условия: сколько энергии, по какой цене, на какой срок?","Минэнерго и DABS"],["Как будут безопасно проводиться платежи?","Банки обеих стран"]],
+   special:{1:{no:"Официальный ответ: ещё строится; август 2027 повторён как прогноз."}},
+   today:"Новый срок есть только в отдельных новостях. Про зимние поставки официально никто не спрашивал.",withT:"Оба становятся вопросами с датой в конкретное ведомство. Если ответа нет — они идут к министрам.",src:"Статусы: работа, раздел 7.1. Вопросы: раздел 6.5."},
+  tj:{kick:"Кейс 2 · Таджикистан → Афганистан",h1:"<em>Летний</em> продавец",lead:"Таджикистан получает бо́льшую часть энергии от воды. Летом есть что продать, зимой энергия нужна самому. Запустите инструмент и посмотрите, как он работает с сезонами и несовпадающими цифрами.",
+   facts:[["1 760,3 млн кВт·ч","продано Афганистану в 2025 (Минэнерго) [8]"],["90%+","экспорта — в апреле–сентябре [8]"],["2 688 млн кВт·ч","куплено у Узбекистана в 2025 [8]"],["2 цифры","для одного факта: министерство и энергокомпания [8, 9]"]],
+   notes:["Продаёт в основном летом. Нет помесячных данных","Энергия шла в 2025. Пределы линии не проверены","Торговля есть. Детали договора не проверены","Условия оплаты не опубликованы","Нет списка проблем"],
+   qs:[["Сколько энергии вы можете продавать каждый месяц — и почему две цифры за 2025 год разные?","Барки Точик и Минэнерго"],["Сколько энергии линия может безопасно передавать?","Барки Точик и DABS"],["Что сказано в текущем договоре?","Минэнерго Таджикистана и DABS"],["Как проводится оплата?","Банки обеих стран"]],special:{},
+   today:"Только годовые цифры. Никто не видит, сколько энергии реально свободно зимой.",withT:"Карточка запрашивает помесячные цифры перед каждой зимой и летом. Министры видят ответ — или его отсутствие.",src:"Цвета карточки: наше прочтение раздела 7.2 по правилам раздела 6.1."},
+  tap:{kick:"Кейс 3 · Туркменистан → Афганистан (TAP)",h1:"Линия с <em>очень малым количеством данных</em>",lead:"Туркменистан продаёт энергию на север и запад Афганистана, но почти не публикует цифр. Его большая новая линия TAP пока в основном план. Запустите инструмент и посмотрите, почему серый — не красный.",
+   facts:[["Нет","официальных объёмов экспорта [3.5]"],["Янв 2025","соглашение о дорожной карте TAP-500 [50]"],["Сен 2026","переговоры о линии 500 кВ и подстанции Нур-уль-Джихад [49, 51]"],["Нет даты","срок завершения не объявлен"]],
+   notes:["Нет открытых данных","Нет даты завершения. Ещё не построена","Есть план и переговоры. Договор не найден","Условия оплаты не опубликованы","Нет списка проблем"],
+   qs:[["Сколько энергии вы продаёте Афганистану?","Минэнерго Туркменистана"],["Когда будет готова линия?","Туркменская сторона и DABS"],["Есть ли подписанный договор?","Туркменская сторона и DABS"],["Как проводится оплата?","Банки обеих стран"]],special:{},
+   today:"Почти нет открытых цифр. Легко гадать — или обвинять.",withT:"Каждый пробел в данных становится вежливым вопросом с датой. Карточка остаётся честной: серый, пока нет документа.",src:"Статусы: работа, раздел 3.5."}},
+ tj:{sH:"Лето и зима",sI:"Переключите сезон. Меняются модель, река и поток энергии.",sum:"☀ Лето (апр–сен)",win:"❄ Зима (окт–мар)",sumP:"Реки полные. ГЭС производит много энергии. Основной экспорт в Афганистан идёт сейчас.",winP:"Воды меньше. Таджикистану энергия нужна самому, он покупает её у Узбекистана. Сколько остаётся для Афганистана? Помесячные цифры не публикуются — поэтому A остаётся серым.",
+  nH:"Две цифры, один факт",nI:"Министерство и энергокомпания «Барки Точик» дают разные цифры экспорта в Афганистан за 2025 год. Наше правило: <b>сохранить обе, указать, кто что сказал, не брать среднее — и спросить.</b>",min:"Министерство",co:"Барки Точик",diff:"Разница: 5,1 ГВт·ч. Публичного пояснения нет.",nS:"Работа, раздел 7.2: каждый источник маркируется по отчитывающейся организации, две цифры не усредняются. Этот вопрос входит в вопрос A в инструменте выше."},
+ tm:{gH:"Мало данных — это серый, а не красный",gI:"Если страна публикует мало, легко сказать «она провалилась». Наш инструмент так не делает.",wrong:"✗ Неправильно",wrongP:"Цифр нет → <b>Не готово</b>. «Туркменистан провалился». Это обвинение страны без доказательств.",right:"✓ Наш подход",rightP:"Цифр нет → <b>Недостаточно данных</b>. Вежливый вопрос уходит в Минэнерго Туркменистана. Карточка остаётся честной.",gS:"Работа, раздел 6.1: «недостаточно данных» не означает, что критерий не выполнен.",
+  oH:"Одна проблема — на одной карточке",oI:"TAP должна продолжиться в Пакистан. В начале 2026 года отношения Афганистана и Пакистана перешли в пограничные столкновения. Останавливает ли это работу на других линиях? Нажмите кнопку.",hit:"Добавить проблему на маршруте в Пакистан",undo:"Сброс",chg:"⚑ Записано здесь: проблема на маршруте в Пакистан",noChg:"Без изменений. Работа идёт.",msg0:"У каждой линии своя карточка. Проблема записывается только на карточку той линии, которой она касается.",msg1:"<b>Изменилась только карточка TAP.</b> Линии Узбекистана и Таджикистана продолжают работать.",oS:"Работа, раздел 9 [56, 11]",names:["Линия Узбекистана","Линия Таджикистана","Линия Туркменистана (TAP)"],
+  whyN:"Почему это важнее всего здесь: Туркменистан не входит в региональные системы обмена энергоданными (CAPS, REMIT). Простая общая карточка работает там, куда другие системы не доходят."},
+ test:{kick:"Это работает?",h1:"Пусть компьютер <em>проверит правила</em>",lead:"Мы записали правила инструмента в виде небольшой программы. Каждый тест задаёт ситуацию и сам проверяет результат. Нажмите кнопку и смотрите.",run:"▶ Запустить все 6 тестов",of:"из",passed:"проверок пройдено",works:"✓ Работает",failed:"✗ Ошибка",
+  T:[["Никто не отвечает","Может ли вопрос потеряться?",["День 7: отправлено напоминание","День 14: вопрос у рабочей группы","День 30: вопрос у министров","Ни один вопрос не потерян"]],["Приходит ответ","Меняется ли карточка?",["Вопрос закрыт","Карточка показывает новый факт","Линия остаётся «Не готово»","Этот вопрос не ушёл к министрам","Изменение сохранено в истории"]],["Две цифры не совпадают","Что если два источника говорят разное?",["Отмечено как «неясно»","Обе цифры сохранены","Отправлен вопрос","Не может быть зелёным, пока неясно","Отметку снимает только официальный ответ"]],["Нет данных — не значит «нет»","Наказывают ли страну за отсутствие данных?",["Остаётся серым, а не красным","Вопрос запрашивает данные","В сводке — «запрошены данные»","Не написано «провал»"]],["Всё подтверждено","Создаёт ли это лишнюю работу?",["Вопросы не создаются","Сводка: «достаточно доказательств»","Также написано «не гарантия»"]],["Проблема на одной линии","Останавливает ли это другие линии?",["Показано на карточке Туркменистана","Линия Узбекистана не изменилась","Линия Таджикистана не изменилась"]]],
+  showH:"Что тесты показывают — и чего нет",yes:"✓ Показывают",yesL:["Ни один вопрос не теряется.","Ответ действительно меняет карточку.","Противоречащие факты видны до официального ответа.","Мало данных не считается провалом.","Проблема на одной линии не останавливает другие."],notY:"! Пока не показывают",notL:["Что реальные ведомства будут отвечать быстрее.","Что электроэнергия будет поступать надёжнее."],notP:"Для этого нужен реальный тест с реальными ведомствами (пилот).",
+  realH:"Как прошёл бы реальный тест",real:[["Одни документы, два человека","Два эксперта получают один и тот же пакет открытых документов. Они не общаются друг с другом."],["Старый способ и карточка","Каждый проверяет линию обычным способом и с карточкой."],["Измерить","Ставят ли они одинаковые цвета? Сколько уходит времени? Что пропущено?"],["Сообщить всё","Включая плохие результаты. Эксперты по сетям и договорам проверяют инструмент."]],realS:"Работа, раздел 10.2",
+  howH:"Как начать: 6 шагов",how:[["Начать с одной линии","Линия Узбекистана. Использовать рабочую группу 2017 года. Без нового ведомства и новых денег.","Кто: узбекско-афганская рабочая группа"],["Узбекистан предлагает","Он заинтересован больше всех (78% экспортной выручки за электроэнергию). Отправляет карточку рабочей группе для замечаний.","Кто: Узбекистан"],["Заполнить первую карточку","Изучить официальные документы. Дать каждому ответу цвет, дату и источник. Второй человек проверяет.","Кто: рабочая группа, с цифрами от энергокомпаний"],["Запустить список и часы","Каждый недостающий ответ становится вопросом с датой. Реальные сроки согласуются в ходе теста.","Кто: рабочая группа"],["Отправить одну страницу наверх","Дважды в год — министрам и спецпредставителям. Раз в год — на встречу президентов.","Кто: пишет рабочая группа"],["Проверить, затем расширить — или остановить","Если помогает — добавить линии Таджикистана и Туркменистана. Если нет — остановить.","Кто: решают правительства"]],howS:"Работа, разделы 6.4, 9.1 и рекомендации"},
+ g3:{UZ:"Узбекистан",TJ:"Таджикистан",TM:"Туркменистан",AF:"Афганистан",KZ:"Казахстан",KG:"Кыргызстан",PK:"Пакистан",imp:"Около 80% — импорт",bank:"Банк",contract:"Договор",wg:"Рабочая группа",uc:"Строится",river:"Амударья (граница)",border:"Граница",pak:"Пакистан (в будущем)",
+  surx:{plant:"Электростанции Узбекистана",left:"Подстанция Сурхан",right:"Подстанция Пули-Хумри",city:"Кабул"},tj:{plant:"Сангтудинская ГЭС",left:"Таджикская подстанция",right:"Кундуз / Пули-Хумри",city:"Кундуз"},tap:{plant:"Марыйская электростанция",left:"Туркменская подстанция",right:"Герат (подстанция Нур-уль-Джихад)",city:"Герат"},
+  jWG:"L3 · Рабочая группа",jOF:"Ведомства",jMIN:"L2 · Министры",jPRES:"L1 · Президенты",jCARD:"Карточка",rSend:"отправлено",ready:"готово к отправке",r14:"нет ответа 14 дней",r30:"нет ответа 30 дней",r1p:"1 страница в год",q1:"вопрос здесь",qN:"вопроса здесь",sOF:"Ведомства"}}};
+let LANG="en",L=T.en;
+try{const s=localStorage.getItem("lang");if(s&&T[s])LANG=s}catch(e){}
+L=T[LANG];
+
+/* ======================= ENGINE ======================= */
+const COL={ok:"#16a34a",part:"#f59e0b",nd:"#94a3b8",no:"#dc2626"};
+const STC={sent:"#64748b",rem:"#3b82f6",wg:"#f59e0b",min:"#dc2626",done:"#16a34a"};
+const BASE={surx:["nd","no","part","part","nd"],tj:["nd","part","part","nd","nd"],tap:["nd","no","part","nd","nd"]};
+const stageOf=a=>a>=30?"min":a>=14?"wg":a>=7?"rem":"sent";
+function mkCards(){const c={};for(const k in BASE)c[k]=BASE[k].map((st,i)=>({st,n:{key:"base",i}}));return c}
+function newSim(k){return{k,day:0,started:false,qs:[],cards:mkCards()[k],init:mkCards()[k],playing:false}}
+function simSend(s){if(s.started)return 0;s.started=true;const gv=s.ghostV||{};let n=0;for(let i=0;i<4;i++){if(s.cards[i].st==="ok")continue;s.qs.push({i,born:s.day,stage:"sent",closed:false,v:gv[i]?[...gv[i]]:undefined});n++}if(s.cards[4].st!=="ok"){s.cards[4].st="part";s.cards[4].n={key:"list"}}return n}
+const AUTO=[33,34,36,37],AUTOR=[st=>"part",st=>st,st=>st=="nd"?"part":st,st=>st=="nd"?"part":st];
+function simAdv(s,d){for(let x=0;x<d;x++){s.day++;for(const q of s.qs)if(!q.closed){q.stage=stageOf(s.day-q.born);if(s.day-q.born>=AUTO[q.i]){q.closed=true;q.stage="done";q.at=s.day;q.auto=true;const c=s.cards[q.i];c.st=AUTOR[q.i](c.st);c.n={key:"auto",i:q.i}}}}}
+function simReply(s,i,res){const q=s.qs.find(x=>x.i==i&&!x.closed);if(!q)return;q.closed=true;q.stage="done";q.at=s.day;s.cards[i].st=res;s.cards[i].n={key:"rep",res,i}}
+function noteText(k,c,i){if(c.n.key=="base")return L.lines[k].notes[i];if(c.n.key=="auto")return L.lp.auto[i];if(c.n.key=="list")return L.lp.notes.list;const sp=L.lines[k].special[i];return sp&&sp[c.n.res]?sp[c.n.res]:L.lp.notes[c.n.res]}
+function overall(card){if(card.every(c=>c.st=="ok"))return L.lp.ov.ok;if(card.some(c=>c.st=="nd"))return L.lp.ov.nd;return L.lp.ov.x}
+/* test engine (independent of UI) */
+function tState(){const s={day:0,tickets:[],cards:{},flags:{},audit:[],nid:1,open:{}};for(const k in BASE){s.cards[k]=BASE[k].map(st=>({st,note:""}));s.open[k]=false}return s}
+function tOpen(s,k){let n=0;const c=s.cards[k];for(let i=0;i<4;i++){if(c[i].st==="ok"&&!s.flags[k+i])continue;if(s.tickets.some(t=>t.k==k&&t.i==i&&!t.closed))continue;s.tickets.push({id:s.nid++,k,i,born:s.day,stage:"sent",closed:false});n++}if(!s.open[k]){s.open[k]=true;if(c[4].st!=="ok")c[4].st="part"}return n}
+function tAdv(s,d){for(let x=0;x<d;x++){s.day++;for(const t of s.tickets)if(!t.closed)t.stage=stageOf(s.day-t.born)}}
+function tAns(s,id,res,note){const t=s.tickets.find(x=>x.id==id);if(!t||t.closed)return;t.closed=true;t.stage="done";const c=s.cards[t.k][t.i],o=c.st;c.st=res;c.note=note||"reply";if(s.flags[t.k+t.i])delete s.flags[t.k+t.i];s.audit.push({o,res})}
+function tConf(s,k,i,a,b){s.flags[k+i]=[a,b];if(s.cards[k][i].st==="ok")s.cards[k][i].st="part";s.audit.push({src:a},{src:b});s.tickets.push({id:s.nid++,k,i,born:s.day,stage:"sent",closed:false,conf:true})}
+function tPage(s,k){const c=s.cards[k],by=st=>c.map((x,i)=>x.st==st?i:-1).filter(i=>i>=0);return{all:c.every(x=>x.st=="ok"),req:by("nd"),no:by("no")}}
+
+/* ======================= 3D ======================= */
+let ctx,W,H,F,cam,PAL;
+const PALS={light:{bld2:"#f1f4f8",road:"#64748b",tTop:"#d3dbe5",tSide:"#a7b5c6",other:"#eef1f5",AF:"#f5d79e",UZ:"#bcd0ea",TJ:"#c9e5c4",TM:"#e3d6ef",stroke:"#8a9bb2",afS:"#b7791f",lbg:"#ffffff",lfg:"#0f172a",lst:"#c7d0dc",bld:"#e2e8f0",str:"#475569",river:"#7cb6ec",slab:"#dbe5f0",afT:"#7a4a06",main:"#1e3a5f",dim:"#7b8797",snow:"#ffffff",hl:"#ffd166"},
+ dark:{bld2:"#5a6a85",road:"#3a4456",tTop:"#283142",tSide:"#1a212d",other:"#2a3343",AF:"#6f5d3a",UZ:"#34507a",TJ:"#3a5f45",TM:"#55497a",stroke:"#4b5a74",afS:"#c99b4f",lbg:"#232b3a",lfg:"#e3e7ee",lst:"#3a4558",bld:"#4a5870",str:"#c2cad6",river:"#3f73b0",slab:"#262f3f",afT:"#ecd29e",main:"#d4e0f5",dim:"#909bad",snow:"#dbeafe",hl:"#a9873d"}};
+const sub=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]],dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2],nrm=a=>{const l=Math.hypot(a[0],a[1],a[2])||1;return[a[0]/l,a[1]/l,a[2]/l]};
+const cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x)),lerp=(a,b,k)=>a+(b-a)*k,ease=x=>{x=cl(x);return x*x*(3-2*x)};
+function setCam(c){const T_=[c.x,0,c.z];const C=[T_[0]+c.d*Math.sin(c.yaw)*Math.cos(c.pitch),c.d*Math.sin(c.pitch),T_[2]-c.d*Math.cos(c.yaw)*Math.cos(c.pitch)];const f=nrm(sub(T_,C)),r=nrm([f[2],0,-f[0]]),u=[f[1]*r[2]-f[2]*r[1],f[2]*r[0]-f[0]*r[2],f[0]*r[1]-f[1]*r[0]];F=Math.min(H*1.05,W*.78)/(2*Math.tan(.4));cam={C,f,r,u}}
+function pr(p){const d=sub(p,cam.C),z=dot(d,cam.f);if(z<.3)return null;return[W/2+F*dot(d,cam.r)/z,H/2-F*dot(d,cam.u)/z,z]}
+const LD=nrm([-.45,.85,-.55]);const SC={};
+function shade(hex,f){const k=hex+(f*50|0);if(SC[k])return SC[k];const n=parseInt(hex.slice(1),16);return SC[k]=`rgb(${Math.min(255,(n>>16)*f|0)},${Math.min(255,(n>>8&255)*f|0)},${Math.min(255,(n&255)*f|0)})`}
+let FACES=[],POST=[],LABELS=[],OVER=[],SCALE=1;
+function hexL(hex,f){const n=parseInt(hex.slice(1),16);return"#"+[n>>16,n>>8&255,n&255].map(v=>Math.max(0,Math.min(255,Math.round(v*f))).toString(16).padStart(2,"0")).join("")}
+function pushFace(P,col,alpha,layer,stroke,lw){FACES.push({P,z:P.reduce((a,p)=>a+p[2],0)/P.length,col,alpha,layer,stroke,lw})}
+function box(x,y,z,sx,sy,sz,col,o={}){const x0=x-sx/2,x1=x+sx/2,z0=z-sz/2,z1=z+sz/2,y0=y,y1=y+sy;const w=[[x0,y0,z0],[x1,y0,z0],[x1,y0,z1],[x0,y0,z1],[x0,y1,z0],[x1,y1,z0],[x1,y1,z1],[x0,y1,z1]];const V=w.map(pr);if(V.some(v=>!v))return;
+  for(const [ix,n] of [[[4,5,6,7],[0,1,0]],[[0,1,5,4],[0,0,-1]],[[1,2,6,5],[1,0,0]],[[2,3,7,6],[0,0,1]],[[3,0,4,7],[-1,0,0]]]){const c=ix.reduce((a,i)=>[a[0]+w[i][0]/4,a[1]+w[i][1]/4,a[2]+w[i][2]/4],[0,0,0]);if(dot(n,sub(cam.C,c))<=0)continue;pushFace(ix.map(i=>V[i]),shade(col,.66+.44*Math.max(0,dot(n,LD))),o.a??1,o.layer??1,o.stroke||null,o.lw||1)}}
+function prism(pts,y0,y1,top,side,o={}){const P=pts.map(([x,z])=>[pr([x,y0,z]),pr([x,y1,z])]);if(P.some(p=>!p[0]||!p[1]))return;const Ly=o.layer??0;for(let i=0;i<P.length;i++){const j=(i+1)%P.length;pushFace([P[i][0],P[j][0],P[j][1],P[i][1]],side,o.a??1,Ly,null)}pushFace(P.map(p=>p[1]),top,o.a??1,Ly+.5,o.stroke||null,o.lw||1)}
+function line3(pts,col,w=2,o={}){POST.push(()=>{const P=pts.map(pr);ctx.strokeStyle=col;ctx.lineWidth=w;ctx.globalAlpha=o.a??1;ctx.setLineDash(o.dash||[]);ctx.lineDashOffset=o.off||0;ctx.lineCap="round";ctx.beginPath();let st=false;for(const p of P){if(!p){st=false;continue}st?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);st=true}ctx.stroke();ctx.setLineDash([]);ctx.lineDashOffset=0;ctx.globalAlpha=1})}
+function dot3(p,r,col,o={}){(o.over?OVER:POST).push(()=>{const q=pr(p);if(!q)return;ctx.globalAlpha=o.a??1;ctx.fillStyle=col;ctx.beginPath();ctx.arc(q[0],q[1],r,0,7);ctx.fill();if(o.stroke){ctx.strokeStyle=o.stroke;ctx.lineWidth=o.lw||2;ctx.stroke()}if(o.txt){ctx.fillStyle=o.tc||"#fff";font(o.fs||13,800);ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(o.txt,q[0],q[1]+.5)}ctx.globalAlpha=1})}
+function ring(x,y,z,r,col,w=3){const pts=[];for(let i=0;i<=40;i++){const a=i/40*Math.PI*2;pts.push([x+Math.cos(a)*r,y,z+Math.sin(a)*r])}line3(pts,col,w)}
+function label(p,txt,o={}){LABELS.push({p,txt,o})}
+function font(px,w=700){ctx.font=`${w} ${px}px Figtree, system-ui, sans-serif`}
+function pill(x,y,txt,o={}){const sz=(o.size||14)*SCALE;font(sz,700);const pad=11*SCALE,w=ctx.measureText(txt).width+pad*2,h=sz+13;const X=x-w/2;ctx.globalAlpha=o.a??1;ctx.beginPath();ctx.roundRect(X,y-h/2,w,h,h/2);ctx.fillStyle=o.bg||PAL.lbg;ctx.shadowColor="rgba(0,0,0,.14)";ctx.shadowBlur=10;ctx.shadowOffsetY=3;ctx.fill();ctx.shadowColor="transparent";ctx.shadowBlur=0;ctx.shadowOffsetY=0;ctx.strokeStyle=o.st||PAL.lst;ctx.lineWidth=1;ctx.stroke();ctx.fillStyle=o.fg||PAL.lfg;ctx.textAlign="left";ctx.textBaseline="middle";ctx.fillText(txt,X+pad,y+.5);ctx.globalAlpha=1;return[X,y-h/2,w,h]}
+function render(){FACES.sort((a,b)=>a.layer-b.layer||b.z-a.z);for(const f of FACES){ctx.globalAlpha=f.alpha;ctx.beginPath();f.P.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();ctx.fillStyle=f.col;ctx.fill();if(f.stroke){ctx.strokeStyle=f.stroke;ctx.lineWidth=f.lw;ctx.stroke()}}ctx.globalAlpha=1;for(const fn of POST)fn();
+  const placed=[];const Ls=LABELS.map(l=>({...l,q:pr(l.p)})).filter(l=>l.q).sort((a,b)=>b.q[2]-a.q[2]);
+  for(const l of Ls){let y=l.q[1]+(l.o.dy||0)*SCALE;const sz=(l.o.size||14)*SCALE;font(sz,700);const w=ctx.measureText(l.txt).width+22*SCALE,h=sz+13;let x=l.q[0]-w/2;x=Math.max(4,Math.min(W-w-4,x));
+    for(let k=0;k<6;k++){const hit=placed.find(b=>x<b[0]+b[2]&&x+w>b[0]&&y-h/2<b[1]+b[3]&&y+h/2>b[1]);if(!hit)break;y=hit[1]-h/2-3}
+    placed.push(pill(x+w/2,y,l.txt,l.o))}for(const fn of OVER)fn()}
+/* map */
+const CO={KZ:[[52,47],[52,44.2],[53,44],[52.5,41.8],[54,42.3],[55.5,41.3],[56,41.3],[56,45],[58.5,45.6],[61,44.4],[62,43.5],[64.5,43.7],[66,43],[68,41],[70,41.5],[71,42.2],[73.5,42.5],[75,42.8],[78,42.9],[80,42.2],[80,47]],
+UZ:[[56,45],[58.5,45.6],[61,44.4],[62,43.5],[64.5,43.7],[66,43],[68,41],[70,41.5],[71,42.2],[73.1,40.8],[72,40.3],[70.6,40.2],[69.9,40.7],[69.2,40.4],[68.6,39.6],[67.4,39.3],[68,39],[68.4,38.2],[67.8,37.2],[66.5,37.4],[65,38.3],[62.5,39.7],[61,41.2],[60,42.2],[58.5,42.6],[56,41.3]],
+KG:[[71,42.2],[73.5,42.5],[75,42.8],[78,42.9],[80,42.2],[78.5,41.5],[76.5,40.4],[74.8,40.4],[73.6,39.5],[71.5,39.6],[69.6,39.7],[70.6,40.2],[72,40.3],[73.1,40.8]],
+TJ:[[67.8,37.2],[68.4,38.2],[68,39],[67.4,39.3],[68.6,39.6],[69.2,40.4],[69.9,40.7],[70.6,40.2],[69.6,39.7],[71.5,39.6],[73.6,39.5],[75,38.6],[74.9,37.3],[72.6,37],[71.6,37.1],[71.4,37.9],[70.2,37.9],[69.4,37.2]],
+TM:[[52.5,41.8],[54,42.3],[55.5,41.3],[56,41.3],[58.5,42.6],[60,42.2],[61,41.2],[62.5,39.7],[65,38.3],[66.5,37.4],[64.5,36.3],[62.5,35.4],[61,35.6],[59,37.4],[57,38],[55,37.8],[53.9,37.3],[53.8,39.5]],
+AF:[[61,35.6],[62.5,35.4],[64.5,36.3],[66.5,37.4],[67.8,37.2],[69.4,37.2],[70.2,37.9],[71.4,37.9],[71.6,37.1],[72.6,37],[74.9,37.3],[74.5,37],[72.5,36.7],[71.2,36],[71.6,35.1],[71.1,34.4],[70,34],[69.9,33.1],[70.3,32.4],[69.4,31.2],[68,31.6],[66.7,30.9],[66.3,29.9],[64,29.4],[62.5,29.4],[60.9,29.8],[61.6,31.4],[60.8,31.5],[60.6,33.5],[60.5,34.2]],
+PK:[[60.9,29.8],[62.5,29.4],[64,29.4],[66.3,29.9],[66.7,30.9],[68,31.6],[69.4,31.2],[70.3,32.4],[69.9,33.1],[70,34],[71.1,34.4],[71.6,35.1],[71.2,36],[72.5,36.7],[74.5,37],[75.5,36.8],[77,35.5],[74,34],[74.8,32.8],[74.5,31],[73.5,29.5],[72,28],[70.8,27.7],[70,26.3],[71,24.4],[68.6,23.9],[66.7,25.3],[64,25.3],[61.6,25.2],[62.5,26.5],[62.8,27.3],[61.6,28.3]],
+IR:[[52,36.7],[53.9,37.3],[55,37.8],[57,38],[59,37.4],[61,35.6],[60.5,34.2],[60.6,33.5],[60.8,31.5],[61.6,31.4],[60.9,29.8],[61.6,28.3],[62.8,27.3],[62.5,26.5],[61.6,25.2],[58.5,25.5],[57.3,25.9],[56.3,27.1],[54,26.6],[52,27.4]]};
+const LBL={KZ:[64,45],UZ:[63.4,41.6],KG:[75.6,41.5],TJ:[72.6,38.6],TM:[57.8,39.6],AF:[65.2,33.4],PK:[68.6,27.6]};
+const K=Math.cos(36*Math.PI/180),MH=.35,M3=(lon,lat,y=MH)=>[(lon-66)*K,y,lat-36];
+function mapScene(t){prism([[52,23.5],[80,23.5],[80,47],[52,47]].map(([a,b])=>[(a-66)*K,b-36]),-.6,0,PAL.tTop,PAL.tSide,{layer:-1});
+  for(const k in CO){const af=k=="AF";const c=PAL[k]||PAL.other;prism(CO[k].map(([lo,la])=>[(lo-66)*K,la-36]),0,MH,c,shade(c,.75),{stroke:af?PAL.afS:PAL.stroke,lw:af?2.2:1.2})}
+  for(const k in LBL){const main=["AF","UZ","TJ","TM"].includes(k);label(M3(LBL[k][0],LBL[k][1],MH+.05),L.g3[k],{size:k=="AF"?17:14,bg:"rgba(0,0,0,0)",st:"rgba(0,0,0,0)",fg:k=="AF"?PAL.afT:main?PAL.main:PAL.dim})}
+  const AFp=[65.5,33.8];[[[64.5,40.2],"#3b82f6"],[[69.6,38.4],"#22c55e"],[[59.5,38.6],"#8b5cf6"]].forEach(([a,c],i)=>{const A=M3(a[0],a[1]),B=M3(AFp[0],AFp[1]),pts=[];for(let j=0;j<=40;j++){const u=j/40;pts.push([lerp(A[0],B[0],u),MH+.05+Math.sin(u*Math.PI)*1.6,lerp(A[2],B[2],u)])}line3(pts,c,9,{a:.2});line3(pts,c,4);for(let m=0;m<4;m++){const u=(t*.35+i*.13+m/4)%1;dot3([lerp(A[0],B[0],u),MH+.05+Math.sin(u*Math.PI)*1.6,lerp(A[2],B[2],u)],4,"#fff",{stroke:c,lw:2})}});
+  label(M3(65.2,32.2,MH+.4),L.g3.imp,{size:15,bg:"#dc2626",fg:"#fff",st:"#dc2626"})}
+/* line model */
+const LGEO={surx:{c:"UZ",plantType:"thermal",built:.35},tj:{c:"TJ",plantType:"hydro",built:1},tap:{c:"TM",plantType:"thermal",built:.15}};
+function pylon(x,z,h,a=1){box(x,0,z,.09,h,.09,PAL.str,{a});box(x,h-.05,z,1.0,.07,.07,PAL.str,{a});box(x,h-.38,z,.7,.06,.06,PAL.str,{a})}
+function lineScene(k,t,hl,card,o={}){const G=LGEO[k],N=L.g3[k],winter=o.season=="winter",big=W>=1200,mid=W>=700;
+  box(-5.2,-.5,0,10.4,.5,8,winter?hexL(PAL[G.c],1.08):PAL[G.c]);box(5.2,-.5,0,10.4,.5,8,PAL.AF);box(0,-.49,0,1.0,.5,8,winter?hexL(PAL.river,1.25):PAL.river);
+  if(o.pak){box(13.4,-.5,0,6,.5,8,PAL.other,{a:.6});label([13.6,.1,-3],L.g3.pak,{size:14,fg:PAL.dim})}
+  label([-7.6,.1,-3.3],L.g3[G.c],{size:18});label([7.6,.1,-3.3],L.g3.AF,{size:18,fg:PAL.afT});
+  if(big)label([0,.1,3.9],k=="tap"?L.g3.border:L.g3.river,{size:12});
+  if(G.plantType=="hydro"){box(-8,0,1.6,2.6,1.3,.5,"#94a3b8");box(-8,0,2.6,2.6,winter?.08:.4,1.5,PAL.river)}else{box(-8,0,1.6,2,1,1.2,PAL.bld);box(-8,1,1.6,1.2,.25,.7,"#94a3b8");box(-8.6,0,1.9,.3,2.2,.3,"#94a3b8");box(-8,0,1.9,.3,2.6,.3,"#94a3b8")}
+  if(big)label([-8,2.9,1.6],N.plant,{size:13});
+  for(const [x,txt] of [[-4.6,N.left],[4.6,N.right]]){box(x,0,0,1.3,.25,1.1,PAL.bld);for(const dx of [-.35,0,.35])box(x+dx,.25,0,.22,.45,.3,"#64748b");if(big)label([x,1.3,0],txt,{size:13})}
+  const n=9,xs=[...Array(n)].map((_,i)=>-3.6+i*.9),built=Math.round(G.built*n),bNo=card[1].st=="no";
+  xs.forEach((x,i)=>pylon(x,0,1.7,i<built||G.built>=1?1:.22));
+  const tops=[[-4.6,.75,0],...xs.map(x=>[x,1.65,0]),[4.6,.75,0]],bi=Math.min(tops.length,built+2);
+  line3(tops.slice(0,bi),bNo?"#ea7a00":(winter?"#94a3b8":"#3b82f6"),3);if(bi<tops.length)line3(tops.slice(bi-1),"#94a3b8",2,{dash:[5,6]});
+  if(o.pak){line3([[4.6,.75,0],[7,1.6,0],[10.5,1.6,0],[13,1.6,0]],"#a78bfa",2,{dash:[4,7]});[7.5,9.5,11.5].forEach(x=>pylon(x,-.4,1.7,.18))}
+  if(G.built<1){const cx=xs[Math.min(n-1,built)];box(cx+.3,0,-.9,.12,2.6,.12,"#f59e0b");box(cx-.2,2.5,-.9,1.4,.1,.1,"#f59e0b");if(big)label([cx+.3,0,-.9],L.g3.uc,{size:12,st:"#f59e0b",dy:16})}
+  if(!bNo){const nd=winter?1:5;for(let m=0;m<nd;m++){const u=(t*.3+m/nd)%1,f=u*(tops.length-1),i=Math.min(tops.length-2,Math.floor(f)),p=[lerp(tops[i][0],tops[i+1][0],f-i),lerp(tops[i][1],tops[i+1][1],f-i),0];dot3(p,4,"#fff",{stroke:"#3b82f6"})}}
+  if(winter){for(let m=0;m<40;m++){const x=((m*37)%200)/10-10,z=((m*53)%80)/10-4,y=4-((t*.6+m*.37)%4);dot3([x,y,z],2.5,PAL.snow,{stroke:"#94a3b8",lw:1})}}
+  for(const [dx,dz,h] of [[0,0,.9],[.5,.2,.6],[-.4,.4,.7],[.2,-.5,1.1],[-.5,-.3,.5]])box(7.8+dx,0,2+dz,.35,h,.35,PAL.bld);if(big)label([7.8,1.6,2],N.city,{size:13});
+  box(0,0,-2.4,1.3,.35,.9,PAL.bld);box(0,.36,-2.4,.8,.04,.6,"#ffffff",{stroke:"#334155"});
+  for(const x of [-7.4,7.4]){box(x,0,-2.4,1.2,.8,.9,PAL.bld);box(x,.8,-2.4,1.35,.12,1.05,"#94a3b8")}
+  line3([[-7.4,.9,-2.4],[0,1.1,-2.6],[7.4,.9,-2.4]],"#16a34a",2,{dash:[3,5],off:-t*20});
+  box(0,0,2.9,1.6,.4,1.0,PAL.bld);for(const dx of [-.9,.9])box(dx,0,2.9,.35,.3,.35,"#94a3b8");box(0,.4,2.9,.5,.05,.4,"#ffffff",{stroke:"#334155"});
+  const P5=[[-8,3.6,1.6],[-3.6,2.5,0],[1.3,1.4,-2.4],[-7.4,2.0,-2.4],[0,2.7,2.9]];
+  P5.forEach((p,i)=>{const st=card[i].st,on=hl===i;if(on)ring(p[0],.02,p[2],1.6,COL[st],4);line3([[p[0],.05,p[2]],[p[0],p[1]-.2,p[2]]],COL[st],1.5,{a:.55});dot3(p,(on?18:15)*SCALE,COL[st],{stroke:"#ffffff",lw:3,txt:"ABCDE"[i],fs:(on?16:14)*SCALE,over:true});if(hl==null&&mid)label([p[0],p[1],p[2]],L.QS[i],{size:13,dy:-30,bg:PAL.lbg,fg:PAL.lfg,st:COL[st]})});
+  if(hl!=null){const p=P5[hl];label([p[0],p[1],p[2]],"ABCDE"[hl]+" · "+L.QS[hl]+" → "+L.st[card[hl].st],{size:15,dy:-34,bg:COL[card[hl].st],fg:card[hl].st=="part"?"#111":"#fff",st:"#0f172a"})}}
+/* journey board: where is each question */
+const JX={card:-8.4,of:-4.2,wg:0,min:4.2,pres:8.4};
+const JCOL={card:"#16a34a",of:"#3b82f6",wg:"#f59e0b",min:"#dc2626",pres:"#7c3aed"};
+function pad(x,z,r,col,on){const pts=[];for(let i=0;i<10;i++){const a=i/10*Math.PI*2+.31;pts.push([x+Math.cos(a)*r,z+Math.sin(a)*r*.82])}prism(pts,0,on?.14:.08,on?col:shade(col,1),shade(col,.7),{layer:.6,a:on?1:.35,stroke:on?"#ffffff":null,lw:2})}
+function tree(x,z,h=1){box(x,0,z,.12,.35*h,.12,"#8b6b4a");box(x,.3*h,z,.55*h,.55*h,.55*h,"#4ca36a");box(x,.8*h,z,.32*h,.35*h,.32*h,"#5bb87a")}
+function journey(s,t,k){const G=LGEO[k];
+  box(0,-.45,.5,22,.45,5.2,PAL.slab,{layer:-1});
+  // road
+  box(0,-.02,-1.25,19,.04,.9,PAL.road,{layer:-.6});for(let i=0;i<24;i++){const x=-9.2+i*.8+((t*.9)%.8);box(x,.03,-1.25,.35,.01,.08,"#ffffff",{a:.7,layer:-.5})}
+  for(const [x,z] of [[-10.3,2.4],[-6.3,2.7],[-2.1,2.6],[2.1,2.7],[6.3,2.6],[10.3,2.4]])tree(x,z,.9);
+  const where=q=>!s.started?"card":q.closed?"card":q.stage=="wg"?"wg":q.stage=="min"?"min":"of";
+  const items=s.started?s.qs:s.cards.slice(0,4).map((c,i)=>c.st=="ok"?null:{i,stage:"sent",ghost:true,closed:false}).filter(Boolean);
+  if(!s.started){s.ghostV=s.ghostV||{};items.forEach(q=>{q.v=s.ghostV[q.i]||(s.ghostV[q.i]=[JX.card,.4,-.2])})}
+  const cnt={card:0,of:0,wg:0,min:0,pres:0};items.forEach(q=>cnt[where(q)]++);
+  for(const key of ["card","of","wg","min","pres"])pad(JX[key],.1,1.55,JCOL[key],cnt[key]>0);
+  // buildings (behind pads)
+  const Z=1.75,on=key=>cnt[key]>0;
+  // card board
+  box(JX.card,0,Z,1.9,1.3,.12,PAL.bld);box(JX.card,.15,Z-.07,1.6,1.0,.02,"#ffffff");for(let i=0;i<5;i++){box(JX.card-.55,.3+i*.17,Z-.09,.14,.12,.02,COL[s.cards[i].st]);box(JX.card+.15,.3+i*.17,Z-.09,1.0,.05,.02,"#cbd5e1")}box(JX.card-.8,0,Z,.08,1.3,.08,PAL.str);box(JX.card+.8,0,Z,.08,1.3,.08,PAL.str);
+  // offices: ministry, grid co, bank
+  box(JX.of-1,0,Z,1.0,1.8,.9,on("of")?PAL.bld2:PAL.bld);for(let i=0;i<3;i++)box(JX.of-1.3+i*.3,0,Z-.5,.08,1.4,.08,"#cbd5e1");box(JX.of-1,1.8,Z,1.15,.14,1.05,"#94a3b8");
+  box(JX.of+.1,0,Z,.9,1.1,.8,PAL.bld);for(const dx of [-.25,0,.25])box(JX.of+.1+dx,1.1,Z,.16,.32,.22,"#64748b");
+  box(JX.of+1.1,0,Z,.9,1.3,.8,PAL.bld);box(JX.of+1.1,1.3,Z,1.0,.12,.9,"#94a3b8");
+  // working group: round table + two banners
+  box(JX.wg,0,Z,2.2,.9,1.2,on("wg")?PAL.bld2:PAL.bld);const oct=[];for(let i=0;i<8;i++){const a=i/8*Math.PI*2;oct.push([JX.wg+Math.cos(a)*.75,Z-.05+Math.sin(a)*.45])}prism(oct,.9,1.05,"#e2e8f0","#94a3b8",{layer:1});
+  for(const [dx,c] of [[-.95,PAL[G.c]],[.95,PAL.AF]]){box(JX.wg+dx,.9,Z+.4,.05,1.1,.05,PAL.str);box(JX.wg+dx+.22,1.6,Z+.4,.42,.32,.03,c)}
+  // ministers: hall + dome
+  box(JX.min,0,Z,2.4,1.1,1.3,on("min")?PAL.bld2:PAL.bld);for(let i=0;i<6;i++)box(JX.min-1+i*.4,0,Z-.68,.09,1.0,.09,"#cbd5e1");box(JX.min,1.1,Z,1.1,.3,.8,"#94a3b8");box(JX.min,1.4,Z,.75,.25,.55,"#a8b4c4");box(JX.min,1.65,Z,.4,.18,.3,"#b8c2d0");
+  // presidents: palace + tower + flag
+  box(JX.pres,0,Z,2.6,1.0,1.2,PAL.bld);box(JX.pres,0,Z,.9,1.9,.9,PAL.bld2);box(JX.pres,1.9,Z,1.0,.12,1.0,"#94a3b8");box(JX.pres,2.02,Z,.05,1.0,.05,PAL.str);box(JX.pres+.24,2.7,Z,.45,.3,.03,"#3b82f6");
+  // labels
+  const sm=W<600;const LB=sm?[["card","✓",3.4],["of",L.g3.sOF,3.4],["wg","L3",3.4],["min","L2",3.4],["pres","L1",3.4]]:[["card",L.g3.jCARD,3.4],["of",L.g3.jOF,3.4],["wg",L.g3.jWG,3.4],["min",L.g3.jMIN,3.4],["pres",L.g3.jPRES,3.4]];
+  for(const [key,txt,h] of LB)label([JX[key],h,Z],txt+(cnt[key]>0&&key!="pres"?"  ·  "+cnt[key]:""),{size:15,bg:cnt[key]>0?JCOL[key]:PAL.lbg,fg:cnt[key]>0?"#fff":PAL.lfg,st:cnt[key]>0?JCOL[key]:PAL.lst});
+  // road hints between stations
+  if(W>=1000)[[(JX.card+JX.of)/2,s.started?L.g3.rSend:L.g3.ready],[(JX.of+JX.wg)/2,L.g3.r14],[(JX.wg+JX.min)/2,L.g3.r30],[(JX.min+JX.pres)/2,L.g3.r1p]].forEach(([x,txt])=>label([x,.05,-1.25],txt+" →",{size:12,bg:PAL.road,fg:"#ffffff",st:PAL.road}));
+  // envelopes
+  const grp={};items.forEach(q=>{const w=where(q);(grp[w]=grp[w]||[]).push(q)});
+  const OFF=[[-.55,-.35],[.55,-.35],[-.55,.45],[.55,.45]];
+  for(const w in grp)grp[w].forEach((q,j,arr)=>{const tgt=[JX[w]+(j-(arr.length-1)/2)*.72,.2,-.05];const v=q.v||(q.v=[JX.card,.4,-.2]);
+    const d=Math.hypot(tgt[0]-v[0],tgt[2]-v[2]);v[0]=lerp(v[0],tgt[0],.07);v[2]=lerp(v[2],tgt[2],.07);v[1]=.2+Math.min(1.6,d*.35);
+    const c=q.ghost?"#94a3b8":STC[q.stage];box(v[0],v[1],v[2],.85,.1,.6,"#ffffff",{stroke:c,lw:2,a:q.ghost?.7:1});line3([[v[0]-.42,v[1]+.11,v[2]-.3],[v[0],v[1]+.11,v[2]+.05],[v[0]+.42,v[1]+.11,v[2]-.3]],c,1.5);
+    if(q.stage=="rem"&&!q.closed){const r=.55+.15*Math.sin(t*5);ring(v[0],v[1]+.05,v[2],r,"#3b82f6",2)}
+    dot3([v[0],v[1]+.45,v[2]],13*SCALE,c,{stroke:"#0f172a",lw:1.5,txt:"ABCD"[q.i],fs:13*SCALE,over:true})});
+}
+
+/* ======================= STATE ======================= */
+const SIM={surx:newSim("surx"),tj:newSim("tj"),tap:newSim("tap")};
+const HL={surx:null,tj:null,tap:null};let season="summer",tmHit=false,tjAsked=false;
+let theme="light";try{const s=localStorage.getItem("theme");if(s)theme=s;else if(matchMedia("(prefers-color-scheme: dark)").matches)theme="dark"}catch(e){}
+const CAM={map:{x:0,z:-.8,yaw:0,pitch:.9,d:24},line:{x:0,z:-.6,yaw:-.06,pitch:.9,d:16.5},tap:{x:2.4,z:-.6,yaw:-.06,pitch:.9,d:19.5},jour:{x:0,z:0,yaw:0,pitch:.5,d:15}};
+
+/* ======================= TEMPLATES ======================= */
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const P=st=>`<span class="pill" style="background:${COL[st]};color:${st=="part"?"#111":"#fff"}">${L.st[st]}</span>`;
+const person=(on)=>`<svg viewBox="0 0 22 30" aria-hidden="true"><circle cx="11" cy="6" r="5" fill="${on?"#dc2626":"var(--rule)"}"/><path d="M2 29c0-8 4-13 9-13s9 5 9 13z" fill="${on?"#dc2626":"var(--rule)"}"/></svg>`;
+function pageProject(){const p=L.p1;return`
+<div class="hero"><div class="wrap"><div class="hgrid"><div><span class="kick">⚡ ${p.kick}</span><h1>${p.h1}</h1><p class="lead">${p.lead}</p><p class="by">${p.by}</p>
+ <div class="cta"><a class="pri" href="#solution">${p.cta[0]}</a><a href="#uzbekistan">${p.cta[1]}</a></div></div>
+ <div class="fig" style="aspect-ratio:5/4"><canvas data-v="map" role="img" aria-label="${esc(L.g3.imp)}"></canvas></div></div>
+ <div class="sum3">${p.sum.map(([b,s])=>`<div><b>${b}</b><span>${s}</span></div>`).join("")}</div></div></div>
+<div class="sec"><div class="wrap"><h2><span class="num">1</span>${p.pH}</h2><p class="intro">${p.pI}</p><div class="stats">
+ <div class="card stat reveal"><div class="k">${p.s[0][0]}</div><div class="v">${p.s[0][1]}</div><div class="u">${p.s[0][2]}</div><div class="ppl">${[...Array(10)].map((_,i)=>person(i<8)).join("")}</div><p>${p.s[0][3]}</p><p class="src">${p.s[0][4]}</p></div>
+ <div class="card stat reveal"><div class="k">${p.s[1][0]}</div><div class="v">${p.s[1][1]}</div><div class="u">${p.s[1][2]}</div><div class="bar"><i style="width:80%;background:var(--th)"></i><i style="width:20%;background:var(--nd)"></i></div><div class="lg"><span>${p.barL[0]} ~80%</span><span>${p.barL[1]} ~20%</span></div><p style="margin-top:6px">${p.s[1][3]}</p><p class="src">${p.s[1][4]}</p></div>
+ <div class="card stat reveal"><div class="k">${p.s[2][0]}</div><div class="v">${p.s[2][1]}</div><div class="u">${p.s[2][2]}</div><div class="bar"><i style="width:78%;background:#f59e0b"></i></div><p style="margin-top:6px">${p.s[2][3]}</p><p class="src">${p.s[2][4]}</p></div>
+ <div class="card stat reveal"><div class="k">${p.s[3][0]}</div><div class="v">${p.s[3][1]}</div><div class="u">${p.s[3][2]}</div><div class="yr">${[...Array(12)].map((_,i)=>`<i class="${i>=3&&i<=8?"s":""}"></i>`).join("")}</div><div class="lg" style="display:flex;justify-content:space-between;font-size:13px;color:var(--mute);font-weight:700"><span>${p.yrL[0]}</span><span>${p.yrL[1]}</span></div><p style="margin-top:6px">${p.s[3][3]}</p><p class="src">${p.s[3][4]}</p></div>
+</div></div></div>
+<div class="sec alt"><div class="wrap"><h2>${p.mH}</h2><p class="intro">${p.mI}</p><div class="chips">${p.chips.map(c=>`<span>${c}</span>`).join("")}</div></div></div>
+<div class="sec"><div class="wrap"><h2>${p.rH}</h2><p class="intro">${p.rI}</p><div class="grid2">${p.cl.map(([h,a,b,r])=>`<div class="card pad clash reveal"><h3>${h}</h3><div class="vs"><div>${a}</div><i>≠</i><div>${b}</div></div><p>→ ${r}</p></div>`).join("")}</div><p class="note">${p.rN}</p><p class="src">${p.rS}</p></div></div>
+<div class="sec alt"><div class="wrap"><h2>${p.gH}</h2><p class="intro">${p.gP} <span class="src">${p.gS}</span></p><div class="band reveal"><small>${p.rqL}</small><b>${p.rq}</b></div></div></div>
+<div class="sec" id="solution"><div class="wrap"><h2><span class="num">2</span>${p.solH}</h2><p class="intro">${p.solI}</p>
+ <div class="flow">${p.parts.map((x,i)=>`<div class="card step reveal"><div class="pic">${[`<div class="mcard"><div>A–E</div><div><i style="background:#94a3b8"></i>A</div><div><i style="background:#dc2626"></i>B</div><div><i style="background:#f59e0b"></i>C</div><div><i style="background:#f59e0b"></i>D</div><div><i style="background:#94a3b8"></i>E</div></div>`,`<div class="mlist"><div><span>?</span><span>→</span></div><div><span>A</span><span>…</span></div><div><span>B</span><span>…</span></div><div><span>C</span><span>…</span></div><div><span>D</span><span>…</span></div></div>`,`<div class="mclock"><span style="height:40px;background:#3b82f6">7</span><span style="height:64px;background:#f59e0b">14</span><span style="height:92px;background:#dc2626">30</span></div>`,`<div class="mpage"><i></i><i></i><i style="width:70%"></i><i></i><i style="width:50%"></i></div>`][i]}</div><div class="tag">${x[0]}</div><h3>${x[1]}</h3><p>${x[2]}</p><div class="ex"><b>${p.exL}</b> ${x[3]}</div></div>`).join("")}</div>
+ <div class="card cyc reveal"><svg viewBox="0 0 520 300" role="img" aria-label="${esc(p.cycH)}"><defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0 0L10 5L0 10z"/></marker></defs>
+  <ellipse class="ring" cx="260" cy="150" rx="185" ry="105" fill="none" stroke-width="14"/><path id="cp" d="M260 45 A185 105 0 1 1 259.9 45" fill="none"/>
+  <path class="arr" d="M380 70 A185 105 0 0 1 440 135" fill="none" stroke-width="3" marker-end="url(#ah)"/><path class="arr" d="M430 190 A185 105 0 0 1 330 248" fill="none" stroke-width="3" marker-end="url(#ah)"/><path class="arr" d="M180 250 A185 105 0 0 1 82 180" fill="none" stroke-width="3" marker-end="url(#ah)"/><path class="arr" d="M85 115 A185 105 0 0 1 150 63" fill="none" stroke-width="3" marker-end="url(#ah)"/>
+  <circle r="9" fill="#f59e0b" stroke="#fff" stroke-width="3"><animateMotion dur="8s" repeatCount="indefinite"><mpath href="#cp"/></animateMotion></circle>
+  <g font-family="Figtree,system-ui,sans-serif" font-weight="800" text-anchor="middle">${[[260,45,170],[450,151,140],[260,255,150],[83,151,160]].map(([x,y,w],i)=>`<rect class="rect" x="${x-w/2}" y="${y-23}" width="${w}" height="46" rx="23" stroke-width="2"/><text class="txt" x="${x}" y="${y+6}" font-size="15.5">${p.cyc[i]}</text>`).join("")}
+  <text class="txt" x="260" y="140" font-size="15">${p.cyc[4]}</text><text class="sub" x="260" y="162" font-size="13" font-weight="600">${p.cyc[5]}</text><text class="sub" x="260" y="179" font-size="13" font-weight="600">${p.cyc[6]}</text></g></svg>
+  <div><h3>${p.cycH}</h3>${p.cycP.map((x,i)=>`<p><b>${i+1}.</b> ${x}</p>`).join("")}<p class="src">${p.cycS}</p></div></div>
+ <h3 style="margin-top:30px">${p.colH}</h3><div class="cols4">${["ok","part","nd","no"].map(k=>`<div class="card col" style="border-top-color:${COL[k]}"><b style="color:${COL[k]}">${L.st[k]}</b><span>${L.stD[k]}</span></div>`).join("")}</div>
+ <h3 style="margin-top:28px">${p.whyH}</h3><p style="max-width:72ch;margin:0">${p.whyP}</p></div></div>
+<div class="sec alt"><div class="wrap"><h2><span class="num">3</span>${p.whoH}</h2><p class="intro">${p.whoI}</p><div class="ladder">${p.lv.map(([a,b,c])=>`<div class="card reveal"><b>${a}</b><strong>${b}</strong><span>${c}</span></div>`).join("")}</div><p class="src">${p.whoS}</p></div></div>
+<div class="sec"><div class="wrap"><h2>${p.goH}</h2><div class="go3">${p.go.map(([b,s],i)=>`<a class="card" href="#${["uzbekistan","tajikistan","turkmenistan"][i]}"><b>${b}</b><span>${s}</span></a>`).join("")}</div></div></div>`}
+
+function cardHTML(k,card,hl,title,mark){return`<div class="card card5"><div class="hd">${L.lp.cardHd} · ${title}<span>${hl!==false?L.lp.click:""}</span></div>${card.map((c,i)=>`<button class="ck ${hl===i?"on":""} ${mark&&mark[i]?"chg":""}" ${hl!==false?`data-h="${k}:${i}"`:"tabindex=-1"}><span class="l" style="background:${COL[c.st]}">${"ABCDE"[i]}</span><span class="t">${L.Q[i]}</span>${P(c.st)}<span class="n">${mark&&mark[i]?`${L.st[mark[i]]} <span class="arrow">→</span> ${L.st[c.st]} · `:""}${esc(noteText(k,c,i))}</span></button>`).join("")}</div>`}
+const SLUG={surx:"uzbekistan",tj:"tajikistan",tap:"turkmenistan"},TITLE={surx:()=>L.nav[1],tj:()=>L.nav[2],tap:()=>L.nav[3]};
+const FOCUS={};
+function toolHTML(k){const s=SIM[k],lp=L.lp,LN=L.lines[k];const pct=Math.min(100,s.day/40*100),SG=["sent","rem","wg","min","done"];
+ const row=(i,stage,closed,ghost)=>{const c=s.cards[i],si=ghost?-1:SG.indexOf(stage),sc=ghost?"var(--nd)":STC[stage];
+  return`<div class="qr ${!ghost&&!closed?"live":""}" style="--sc:${sc}"><span class="l" style="background:${COL[c.st]}">${"ABCD"[i]}</span><div><div class="q">${esc(LN.qs[i][0])}</div><div class="qsh">${esc(L.QS[i])}</div><div class="to">${lp.asked} ${esc(LN.qs[i][1])}</div></div>${P(c.st)}
+  <div class="steps" title="${SG.map(g=>L.stage[g]).join(" → ")}">${SG.map((g,n)=>`<i style="${n<=si?`background:${sc}`:""}"></i>`).join("")}</div>
+  <div class="sline"><em>${ghost?lp.notSent:L.stage[stage]}</em>${!ghost&&!closed?`<span class="seg">${["ok","part","no"].map((r,j)=>`<button data-a="rep:${k}:${i}:${r}">${lp.rep[j]}</button>`).join("")}</span>`:""}</div></div>`};
+ return`<div class="card tool tool2 ${FOCUS[k]?"tfull":""} ${s.playing?"playing":"paused"}"><div class="tbar"><div class="dayw"><span>${lp.dayL}</span><b>${s.day}</b></div>
+ <div class="ctl"><button class="btn ${s.started?"":"pri"}" data-a="send:${k}" ${s.started?"disabled":""}>${lp.send}</button><button class="btn" data-a="d1:${k}" ${s.started?"":"disabled"}>${lp.d1}</button><button class="btn" data-a="d7:${k}" ${s.started?"":"disabled"}>${lp.d7}</button><button class="btn ${s.playing?"sel":""}" data-a="play:${k}" ${s.started?"":"disabled"}>${s.playing?lp.pause:lp.play}</button><button class="btn" data-a="reset:${k}">${lp.reset}</button>${FOCUS[k]?`<button class="btn tclose" data-a="unfocus:${k}" aria-label="${lp.closeL}">✕</button>`:""}</div>
+ <div class="tl"><i style="width:${pct}%"></i>${lp.marks.map(([d,l])=>`<b class="${s.day>=d?"on":""}" style="left:${d/40*100}%"></b><span style="left:${d/40*100}%">${d}<em> · ${l}</em></span>`).join("")}</div></div>
+ <div class="tgrid"><div class="fig jfig"><canvas data-v="jour:${k}" role="img" aria-label="${esc(lp.jT)}"></canvas><span class="ttl">${lp.jT}</span></div>
+ <div class="qlist">${s.started?s.qs.map(q=>row(q.i,q.stage,q.closed,false)).join("")+`<p class="qnote">${lp.eNote} ${lp.autoN}</p>`:`<div class="qstart">${lp.start}</div>`+s.cards.slice(0,4).map((c,i)=>c.st=="ok"?"":row(i,"sent",false,true)).join("")}</div></div></div>`}
+function onePageHTML(k){const s=SIM[k],lp=L.lp,c=s.cards,by=st=>c.map((x,i)=>x.st==st?`${"ABCDE"[i]} ${L.QS[i]}`:null).filter(Boolean);const open=s.qs.filter(q=>!q.closed),mins=open.filter(q=>q.stage=="min");
+ const Ln=(t,a)=>a.length?`<p><b>${t}:</b> ${a.map(esc).join("; ")}</p>`:"";
+ return`<div class="page1"><h4>${lp.pgT} · ${TITLE[k]()} · ${lp.dayL.toLowerCase()} ${s.day}</h4><p><b>${lp.res}:</b> ${overall(c)}</p>${Ln(lp.pgF[0],by("ok"))}${Ln(lp.pgF[1],by("part"))}${Ln(lp.pgF[2],by("nd"))}${Ln(lp.pgF[3],by("no"))}${Ln(lp.pgF[4],mins.map(q=>"ABCD"[q.i]+" · "+L.lines[k].qs[q.i][0]))}<p>${open.length} ${lp.waiting} · ${s.qs.length-open.length} ${lp.answered}</p></div>`}
+function baHTML(k){const s=SIM[k],mark={};s.cards.forEach((c,i)=>{if(c.st!==s.init[i].st)mark[i]=s.init[i].st});const lp=L.lp;
+ const mini=`<div class="card bam"><div class="hd">${lp.cardHd} · ${TITLE[k]()}</div><div class="bmh"><span>${lp.bef}</span><span>${lp.aftL} ${s.day}</span></div>${s.cards.map((c,i)=>{const o=s.init[i],ch=o.st!==c.st,nn=noteText(k,c,i),no=noteText(k,o,i);return`<div class="bmr ${ch?"chg":""}"><div class="bq"><span class="l" style="background:${COL[c.st]}">${"ABCDE"[i]}</span><b>${L.Q[i]}</b></div><div class="bc"><div class="bx">${P(o.st)}<p>${esc(no)}</p></div><div class="bx ${ch?"new":""}">${P(c.st)}<p>${ch||nn!==no?esc(nn):`<em>${lp.unch}</em>`}</p></div></div></div>`}).join("")}</div>`;
+ return mini+`<div class="ba bafull"><div><h3>${L.lp.bef}</h3>${cardHTML(k,s.init,false,TITLE[k]())}</div><div><h3>${L.lp.now} ${s.day}</h3>${cardHTML(k,s.cards,false,TITLE[k](),mark)}</div></div>`}
+function pageLine(k){const LN=L.lines[k],lp=L.lp,cam=k=="tap"?"tap":"line";let extraTop="",extraBottom="";
+ if(k=="tj"){const t=L.tj;extraTop=`<div class="row" style="margin-bottom:12px"><div class="season"><button data-a="season:summer" aria-pressed="${season=="summer"}">${t.sum}</button><button data-a="season:winter" aria-pressed="${season=="winter"}">${t.win}</button></div><span class="note" style="margin:0;flex:1;min-width:240px">${season=="summer"?t.sumP:t.winP}</span></div>`;
+  extraBottom=`<div class="sec alt"><div class="wrap"><h2>${t.nH}</h2><p class="intro">${t.nI}</p><div class="cmp"><div class="card"><h3>${t.min}</h3><p style="font-size:34px;font-weight:900;margin:0;color:var(--th)">1,760.3 GWh</p></div><div class="card"><h3>${t.co}</h3><p style="font-size:34px;font-weight:900;margin:0;color:var(--th)">1,755.2 GWh</p></div></div><p class="note">${t.diff}</p><p class="src">${t.nS}</p></div></div>`}
+ if(k=="tap"){const t=L.tm;const mk=(i,kk)=>{const hit=tmHit&&kk=="tap";const c=BASE[kk].map((x,j)=>hit&&j==1?"no":x);return`<div class="${hit?"hit":""}"><b>${t.names[i]}</b><div class="dots">${c.map((x,j)=>`<i style="background:${COL[x]}">${"ABCDE"[j]}</i>`).join("")}</div><div style="font-size:14.5px;margin-top:6px;color:${hit?"#dc2626":"var(--mute)"};font-weight:${hit?800:500}">${hit?t.chg:t.noChg}</div></div>`};
+  extraBottom=`<div class="sec alt"><div class="wrap"><h2>${t.gH}</h2><p class="intro">${t.gI}</p><div class="cmp"><div class="card" style="border-color:#fca5a5"><h3>${t.wrong}</h3><p>${t.wrongP}</p></div><div class="card" style="border-color:var(--th)"><h3>${t.right}</h3><p>${t.rightP}</p></div></div><p class="src">${t.gS}</p></div></div>
+  <div class="sec"><div class="wrap"><h2>${t.oH}</h2><p class="intro">${t.oI}</p><div class="row"><button class="btn pri" data-a="tmhit">${t.hit}</button><button class="btn" data-a="tmundo">${t.undo}</button></div><div class="mini3" style="margin-top:12px">${mk(0,"surx")}${mk(1,"tj")}${mk(2,"tap")}</div><p class="note">${tmHit?t.msg1:t.msg0}</p><p class="src">${t.oS}</p><p class="note">${t.whyN}</p></div></div>`}
+ return`<div class="hero"><div class="wrap"><div class="hgrid"><div><span class="kick">⚡ ${LN.kick}</span><h1>${LN.h1}</h1><p class="lead">${LN.lead}</p></div><div class="facts">${LN.facts.map(([b,s])=>`<div class="card fact"><b>${b}</b><span>${s}</span></div>`).join("")}</div></div></div></div>
+ <div class="sec"><div class="wrap"><h2><span class="num">1</span>${lp.modelH}</h2><p class="intro">${lp.modelI}</p>${extraTop}
+  <div class="split"><div class="fig drag"><canvas data-v="${k}" role="img" aria-label="${esc(LN.kick)}"></canvas><span class="hint">${lp.drag}</span></div><div id="card-${k}">${cardHTML(k,SIM[k].cards,HL[k],TITLE[k]())}</div></div><p class="src">${LN.src}</p></div></div>
+ <div class="sec alt"><div class="wrap"><h2><span class="num">2</span>${lp.toolH}</h2><p class="intro">${lp.toolI}</p><div id="tool-${k}">${toolHTML(k)}</div></div></div>
+ <div class="sec"><div class="wrap"><h2><span class="num">3</span>${lp.baH}</h2><p class="intro">${lp.baI}</p><div id="ba-${k}">${baHTML(k)}</div></div></div>
+ <div class="sec alt"><div class="wrap"><h2><span class="num">4</span>${lp.pgH}</h2><p class="intro">${lp.pgI}</p><div class="ba"><div id="pg-${k}">${onePageHTML(k)}</div><div><h3>${lp.chH}</h3><div class="card pad" style="margin-bottom:12px"><h3>${lp.today}</h3><p style="margin:0">${LN.today}</p></div><div class="card pad" style="border-color:var(--th)"><h3>${lp.withT}</h3><p style="margin:0">${LN.withT}</p></div></div></div></div></div>${extraBottom}`}
+let RES=[];
+function testsHTML(){const t=L.test;let pass=0,all=0;RES.forEach(r=>r&&r.forEach(x=>{all++;if(x[1])pass++}));
+ return t.T.map((T_,i)=>{const r=RES[i];const done=r&&r.done;return`<div class="card test ${done&&r.every(x=>x[1])?"pass":""}"><div class="top"><b>${i+1}. ${T_[0]}</b>${done?(r.every(x=>x[1])?`<span class="pill" style="background:#16a34a">${t.works}</span>`:`<span class="pill" style="background:#dc2626">${t.failed}</span>`):""}</div><p class="why">${T_[1]}</p>${r?`<ul class="res">${r.map(([j,ok])=>`<li class="${ok?"p":"f"}">${esc(T_[2][j])}</li>`).join("")}</ul>`:""}</div>`}).join("")+`<span id="scoreData" data-p="${pass}" data-a="${all}" hidden></span>`}
+function pageTest(){const t=L.test;return`<div class="hero"><div class="wrap"><div class="hgrid"><div><span class="kick">⚡ ${t.kick}</span><h1>${t.h1}</h1><p class="lead">${t.lead}</p><div class="row" style="margin-top:16px"><button class="btn pri" data-a="runtests" style="font-size:18px;min-height:56px;padding:0 28px">${t.run}</button><span class="score" id="score"></span></div></div><div class="tchips" id="tchips"></div></div></div></div>
+ <div class="sec"><div class="wrap"><div class="tests" id="tests">${testsHTML()}</div></div></div>
+ <div class="sec alt"><div class="wrap"><h2>${t.showH}</h2><div class="cmp"><div class="card" style="border-color:var(--ok)"><h3>${t.yes}</h3><ul>${t.yesL.map(x=>`<li>${x}</li>`).join("")}</ul></div><div class="card" style="border-color:#f59e0b"><h3>${t.notY}</h3><ul>${t.notL.map(x=>`<li>${x}</li>`).join("")}</ul><p>${t.notP}</p></div></div></div></div>
+ <div class="sec"><div class="wrap"><h2>${t.realH}</h2><div class="tline">${t.real.map(([a,b],i)=>`<div class="card reveal"><b>${i+1}</b><strong>${a}</strong><span>${b}</span></div>`).join("")}</div><p class="src">${t.realS}</p></div></div>
+ <div class="sec alt"><div class="wrap"><h2>${t.howH}</h2><div class="tline">${t.how.map(([a,b,c],i)=>`<div class="card reveal"><b>${i+1}</b><strong>${a}</strong><span>${b}</span><em>${c}</em></div>`).join("")}</div><p class="src">${t.howS}</p></div></div>`}
+
+/* ======================= TESTS ======================= */
+const TESTS=[
+ R=>{const s=tState();tOpen(s,"surx");const sn={};while(s.day<31){tAdv(s,1);if([7,14,30].includes(s.day))sn[s.day]=s.tickets.map(t=>t.stage)}R(0,sn[7].every(x=>x=="rem"));R(1,sn[14].every(x=>x=="wg"));R(2,sn[30].every(x=>x=="min"));R(3,s.tickets.every(t=>!t.closed))},
+ R=>{const s=tState();tOpen(s,"surx");tAdv(s,10);const t=s.tickets.find(x=>x.i==1);tAns(s,t.id,"no","confirmed Aug 2027");tAdv(s,21);R(0,t.closed);R(1,s.cards.surx[1].note.includes("confirmed"));R(2,s.cards.surx[1].st=="no");R(3,t.stage=="done");R(4,s.audit.length>0)},
+ R=>{const s=tState();tConf(s,"tj",0,"1760.3","1755.2");const q=s.tickets.find(x=>x.conf);R(0,!!s.flags.tj0);R(1,s.audit.length>=2);R(2,!!q);R(3,s.cards.tj[0].st!="ok");tAns(s,q.id,"nd");R(4,!s.flags.tj0)},
+ R=>{const s=tState();tOpen(s,"tap");const pg=tPage(s,"tap");R(0,s.cards.tap[0].st=="nd");R(1,s.tickets.some(t=>t.k=="tap"&&t.i==0));R(2,pg.req.includes(0));R(3,!pg.no.includes(0))},
+ R=>{const s=tState();for(let i=0;i<5;i++)s.cards.surx[i]={st:"ok",note:""};const n=tOpen(s,"surx");const pg=tPage(s,"surx");R(0,n==0);R(1,pg.all);R(2,pg.all&&T.en.lp.ov.ok.includes("not a guarantee")&&T.ru.lp.ov.ok.includes("не гарантия"))},
+ R=>{const s=tState();const b=JSON.stringify([s.cards.surx,s.cards.tj]);s.cards.tap[1]={st:"no",note:"political"};tOpen(s,"tap");R(0,s.cards.tap[1].note=="political");R(1,JSON.stringify(s.cards.surx)==JSON.stringify(JSON.parse(b)[0]));R(2,JSON.stringify(s.cards.tj)==JSON.stringify(JSON.parse(b)[1]))}];
+let running=false;
+async function runTests(){if(running)return;running=true;RES=[];updTests();for(let i=0;i<TESTS.length;i++){const all=[];TESTS[i]((j,ok)=>all.push([j,!!ok]));const r=RES[i]=[];for(const x of all){r.push(x);updTests();await new Promise(z=>setTimeout(z,130))}r.done=true;updTests()}running=false}
+function updTests(){const el=document.getElementById("tests");if(!el)return;el.innerHTML=testsHTML();const tc=document.getElementById("tchips");if(tc)tc.innerHTML=L.test.T.map((x,i)=>{const r=RES[i];const ok=r&&r.done&&r.every(y=>y[1]);return`<div class="card"><i class="${ok?"ok":""}">${ok?"✓":i+1}</i><span>${x[0]}</span></div>`}).join("");const d=document.getElementById("scoreData");const a=+d.dataset.a;document.getElementById("score").textContent=a?`${d.dataset.p} ${L.test.of} ${a} ${L.test.passed}`:""}
+
+/* ======================= VIEWS ======================= */
+let views=[],obs=[];
+function initViews(){obs.forEach(o=>o.disconnect());obs=[];views=[];
+ document.querySelectorAll("canvas[data-v]").forEach(c=>{const v={c,ctx:c.getContext("2d"),key:c.dataset.v,uy:0,up:0,vis:false,W:1,H:1};views.push(v);
+  const fit=()=>{const d=Math.min(2,devicePixelRatio||1);v.W=c.clientWidth;v.H=c.clientHeight;c.width=Math.max(1,v.W*d);c.height=Math.max(1,v.H*d);v.ctx.setTransform(d,0,0,d,0,0)};const ro=new ResizeObserver(fit);ro.observe(c);obs.push(ro);fit();
+  const io=new IntersectionObserver(e=>{v.vis=e[0].isIntersecting});io.observe(c);obs.push(io);
+  if(c.parentElement.classList.contains("drag")){let dr=null;c.addEventListener("pointerdown",e=>{dr=[e.clientX,e.clientY];c.setPointerCapture(e.pointerId)});c.addEventListener("pointermove",e=>{if(!dr)return;v.uy-=(e.clientX-dr[0])*.005;v.up=cl(v.up+(e.clientY-dr[1])*.004,-.45,.6);dr=[e.clientX,e.clientY]});c.addEventListener("pointerup",()=>dr=null);c.addEventListener("pointercancel",()=>dr=null)}})}
+const BOUNDS={map:[[-12.1,0,-12.5],[12.1,0,-12.5],[-12.1,0,11],[12.1,0,11],[-3,2,-1]],line:[[-10.4,0,-4],[10.4,0,-4],[-10.4,0,4],[10.4,0,4],[-10.4,3.8,2],[10.4,1.8,2],[0,3,3]],tap:[[-10.4,0,-4],[16.4,0,-4],[-10.4,0,4],[16.4,0,4],[-10.4,3.8,2],[16,1.8,2]],jour:[[-11,-.45,-2.1],[11,-.45,-2.1],[-11,0,3.1],[11,0,3.1],[-8.4,3.9,1.75],[8.4,4.5,1.75],[4.2,4.5,1.75],[-4.2,3.9,1.75]]};
+function fitCam(base,pts,v){let c={...base,yaw:base.yaw+v.uy,pitch:cl(base.pitch+v.up,.2,1.4)};for(let it=0;it<8;it++){setCam(c);let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;for(const p of pts){const q=pr(p);if(!q)continue;x0=Math.min(x0,q[0]);x1=Math.max(x1,q[0]);y0=Math.min(y0,q[1]);y1=Math.max(y1,q[1])}
+  const sc=Math.max((x1-x0)/(W*.94),(y1-y0)/(H*.86));const cx=(x0+x1)/2-W/2,cy=(y0+y1)/2-H/2;const dz=dot(sub([c.x,0,c.z],cam.C),cam.f);
+  c.x+=cam.r[0]*cx/F*dz-cam.u[0]*cy/F*dz;c.z+=cam.r[2]*cx/F*dz-cam.u[2]*cy/F*dz;c.d*=Math.max(.3,sc)}setCam(c)}
+function frame(){const t=performance.now()/1000;PAL=PALS[theme];for(const v of views){if(!(v.vis||window.__all)||!v.c.offsetParent)continue;ctx=v.ctx;W=v.W;H=v.H;SCALE=W<520?.8:W<820?.92:W>1150?1.12:1;ctx.clearRect(0,0,W,H);
+  let camD,draw;const key=v.key;
+  if(key=="map"){camD=CAM.map;draw=()=>mapScene(t)}else if(key.startsWith("jour:")){const k=key.slice(5);camD=H/W>1.15?{...CAM.jour,yaw:-1.1,pitch:.72,d:15}:H/W>.9?{...CAM.jour,yaw:-.95,pitch:.92,d:15}:H/W>.55?{...CAM.jour,yaw:-.45,pitch:.8,d:15}:CAM.jour;draw=()=>journey(SIM[k],t,k)}else{camD=key=="tap"?CAM.tap:CAM.line;if(H/W>.85)camD={...camD,yaw:camD.yaw-.95,pitch:1.02};draw=()=>lineScene(key,t,HL[key],SIM[key].cards,{season:key=="tj"?season:"summer",pak:key=="tap"})}
+  fitCam(camD,BOUNDS[key=="map"?"map":key.startsWith("jour:")?"jour":key=="tap"?"tap":"line"],v);FACES=[];POST=[];LABELS=[];OVER=[];draw();render()}requestAnimationFrame(frame)}
+
+/* ======================= RENDER / EVENTS ======================= */
+const $=id=>document.getElementById(id);
+const ORDER=["project","uz","tj","tm","test"],HASH={project:"project",uzbekistan:"uz",tajikistan:"tj",turkmenistan:"tm",test:"test"},PK={uz:"surx",tj:"tj",tm:"tap"};
+let cur="project";
+function partial(k){const c=$("card-"+k);if(c)c.innerHTML=cardHTML(k,SIM[k].cards,HL[k],TITLE[k]());const t=$("tool-"+k);if(t){const canv=t.querySelector("canvas");const fig=canv&&canv.parentElement;const of=t.querySelector(".tfull"),st=of?of.scrollTop:0;t.innerHTML=toolHTML(k);const nf2=t.querySelector(".tfull");if(nf2&&st)nf2.scrollTop=st;if(fig){const nf=t.querySelector("canvas").parentElement;nf.replaceWith(fig)}}const b=$("ba-"+k);if(b)b.innerHTML=baHTML(k);const p=$("pg-"+k);if(p)p.innerHTML=onePageHTML(k)}
+function renderAll(){L=T[LANG];document.documentElement.lang=LANG;document.documentElement.dataset.theme=theme;$("logoT").textContent=L.logo;$("foot").textContent=L.foot;
+ $("pages").innerHTML=L.nav.map((n,i)=>`<a href="#${["project","uzbekistan","tajikistan","turkmenistan","test"][i]}" data-k="${ORDER[i]}">${i+1} · ${n}</a>`).join("");
+ $("main").innerHTML=`<section class="page" data-k="project">${pageProject()}</section><section class="page" data-k="uz">${pageLine("surx")}</section><section class="page" data-k="tj">${pageLine("tj")}</section><section class="page" data-k="tm">${pageLine("tap")}</section><section class="page" data-k="test">${pageTest()}</section>`;
+ $("lEN").setAttribute("aria-pressed",LANG=="en");$("lRU").setAttribute("aria-pressed",LANG=="ru");$("thB").textContent=theme=="dark"?"☀":"☾";
+ show(false);initViews();updTests();reveal()}
+function show(scroll=true){document.body.dataset.p=cur;document.querySelectorAll("section.page").forEach(s=>s.classList.toggle("on",s.dataset.k==cur));document.querySelectorAll(".pages a").forEach(a=>a.setAttribute("aria-current",a.dataset.k==cur?"page":"false"));
+ const i=ORDER.indexOf(cur);$("nextp").innerHTML=`<a href="#${["uzbekistan","tajikistan","turkmenistan","test","project"][i]}">${L.next[i]}</a>`;if(scroll)window.scrollTo(0,0);reveal()}
+function route(){const h=(location.hash||"#project").slice(1);if(h=="solution"){if(cur!="project"){cur="project";show(false)}return}cur=HASH[h]||"project";show()}
+let rio;function reveal(){if(rio)rio.disconnect();rio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");rio.unobserve(e.target)}}),{threshold:.08});document.querySelectorAll(".reveal:not(.in)").forEach(el=>rio.observe(el))}
+const timers={};
+function act(a){const [cmd,k,i,r]=a.split(":");const s=SIM[k];
+ if(cmd=="send"){simSend(s);partial(k)}
+ else if(cmd=="d1"){simAdv(s,1);partial(k)}else if(cmd=="d7"){simAdv(s,7);partial(k)}
+ else if(cmd=="unfocus"){FOCUS[k]=false;document.body.classList.remove("fsopen");partial(k)}
+ else if(cmd=="play"){s.playing=!s.playing;if(s.playing){FOCUS[k]=true;document.body.classList.add("fsopen");timers[k]=setInterval(()=>{if(s.day>=40||!s.qs.some(q=>!q.closed)){s.playing=false;clearInterval(timers[k]);partial(k);return}simAdv(s,1);partial(k)},350)}else clearInterval(timers[k]);partial(k)}
+ else if(cmd=="reset"){clearInterval(timers[k]);SIM[k]=newSim(k);partial(k)}
+ else if(cmd=="rep"){simReply(s,+i,r);partial(k)}
+ else if(cmd=="season"){season=k;const sec=document.querySelector('section[data-k="tj"]');const y=window.scrollY;renderAll();window.scrollTo(0,y)}
+ else if(cmd=="tmhit"||cmd=="tmundo"){tmHit=cmd=="tmhit";const y=window.scrollY;renderAll();window.scrollTo(0,y)}
+ else if(cmd=="runtests")runTests()}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(b){act(b.dataset.a);return}const h=e.target.closest("[data-h]");if(h){const [k,i]=h.dataset.h.split(":");HL[k]=HL[k]===+i?null:+i;const c=$("card-"+k);if(c)c.innerHTML=cardHTML(k,SIM[k].cards,HL[k],TITLE[k]())}});
+$("lEN").onclick=()=>{LANG="en";try{localStorage.setItem("lang","en")}catch(e){}const y=scrollY;renderAll();scrollTo(0,y)};
+$("lRU").onclick=()=>{LANG="ru";try{localStorage.setItem("lang","ru")}catch(e){}const y=scrollY;renderAll();scrollTo(0,y)};
+$("thB").onclick=()=>{theme=theme=="dark"?"light":"dark";try{localStorage.setItem("theme",theme)}catch(e){}document.documentElement.dataset.theme=theme;$("thB").textContent=theme=="dark"?"☀":"☾"};
+addEventListener("hashchange",route);
+cur=HASH[(location.hash||"#project").slice(1)]||"project";renderAll();route();requestAnimationFrame(frame);
+const unFocus=()=>{let any=false;for(const k in FOCUS)if(FOCUS[k]){FOCUS[k]=false;any=true;try{partial(k)}catch(e){}}if(any)document.body.classList.remove("fsopen")};addEventListener("keydown",e=>{if(e.key=="Escape")unFocus()});addEventListener("hashchange",unFocus);
+window.__s={runTests,SIM,act,setLang:l=>{LANG=l;renderAll()},setTheme:t=>{theme=t;document.documentElement.dataset.theme=t}};
+}
+try{const nv=document.querySelector("nav.top");const setH=()=>document.documentElement.style.setProperty("--navh",nv.offsetHeight+"px");new ResizeObserver(setH).observe(nv);setH()}catch(e){}
+try{const T2={en:{fs:"Full screen",x:"Close",tip:"Turn your phone sideways for a bigger view"},ru:{fs:"Во весь экран",x:"Закрыть",tip:"Поверните телефон, чтобы увеличить"}};
+const LG=()=>document.documentElement.lang=="ru"?"ru":"en";
+const add=()=>{if(!document.querySelector(".fig.full,.tfull"))document.body.classList.remove("fsopen");addB()};const addB=()=>document.querySelectorAll(".fig").forEach(f=>{if(f.querySelector(":scope>.fsb"))return;const b=document.createElement("button");b.className="fsb";b.type="button";b.textContent="⤢";b.setAttribute("aria-label",T2[LG()].fs);f.appendChild(b);const t=document.createElement("span");t.className="fstip";t.textContent=T2[LG()].tip;f.appendChild(t)});
+const close=()=>{document.querySelectorAll(".fig.full").forEach(f=>{f.classList.remove("full");const b=f.querySelector(":scope>.fsb");if(b){b.textContent="⤢";b.setAttribute("aria-label",T2[LG()].fs)}});document.body.classList.remove("fsopen")};
+document.addEventListener("click",e=>{const b=e.target.closest(".fsb");if(!b)return;e.preventDefault();e.stopPropagation();const f=b.parentElement;if(f.classList.contains("full")){close();return}close();f.classList.add("full");document.body.classList.add("fsopen");b.textContent="✕";b.setAttribute("aria-label",T2[LG()].x);f.querySelector(".fstip").textContent=T2[LG()].tip},true);
+document.addEventListener("keydown",e=>{if(e.key=="Escape")close()});
+new MutationObserver(add).observe(document.body,{childList:true,subtree:true});add();window.__fsClose=close}catch(e){}
+try{const ctr=()=>{const a=document.querySelector(".pages a[aria-current=page]"),P=a&&a.parentElement;if(P&&P.scrollWidth>P.clientWidth)P.scrollTo({left:a.offsetLeft-P.clientWidth/2+a.offsetWidth/2})};addEventListener("hashchange",()=>setTimeout(ctr,50));setTimeout(ctr,300)}catch(e){}
 </script>
 </body>
 </html>
